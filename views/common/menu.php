@@ -1,3 +1,5 @@
+<link href="public/css/.css" rel="stylesheet">
+
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg align-items-center border-bottom-0">
         <?php
@@ -42,65 +44,4 @@
         </div>
     </nav>
 </div>
-
-
-<style>
-    .navbar-nav .nav-link {
-        font-size: 1em;
-        /* Taille du texte en em */
-    }
-
-    .navbar-toggler {
-        font-size: 1.5em;
-        /* Taille du bouton en em */
-    }
-
-    .navbar-toggler-icon {
-        font-size: 2em;
-        /* Taille de l'icône en em */
-    }
-
-    .navbar {
-        margin-top: -25px;
-        /* Ajustement de la marge supérieure de la barre de navigation */
-    }
-
-    .navbar-nav .nav-link.active {
-        color: #ffffff;
-        /* Couleur du texte en surbrillance */
-        background-color: #000000;
-        /* Couleur de fond en surbrillance */
-    }
-
-    /* Styles spécifiques à la page welcome */
-    .welcome-page .nav-link {
-        color: white;
-        /* Modifier la couleur des icônes en blanc */
-    }
-
-    @media (max-width: 1200px) {
-
-        /* Pour les écrans de petite taille */
-        .navbar-nav .nav-link {
-            font-size: 0.65em;
-            /* Réduire la taille du texte */
-        }
-
-        .navbar-toggler {
-            font-size: 1em;
-            /* Réduire la taille du bouton */
-        }
-
-        .navbar-toggler-icon {
-            font-size: 1.5em;
-            /* Réduire la taille de l'icône */
-        }
-
-        .navbar {
-            margin-top: -25px;
-            /* Ajustement de la marge supérieure de la barre de navigation */
-        }
-    }
-</style>
-
 </html>

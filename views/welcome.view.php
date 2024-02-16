@@ -65,11 +65,13 @@
         }
 
         .navbar-collapse {
-            margin-right: 50px; /* Espacement vers la droite */
+            margin-right: 50px;
+            /* Espacement vers la droite */
         }
 
         .d-flex {
-            margin-left: 140px; /* Espacement vers la droite */
+            margin-left: 140px;
+            /* Espacement vers la droite */
         }
 
         @media (max-width: 600px) {
@@ -78,12 +80,33 @@
             body {
                 background-size: contain;
             }
+
+            .d-flex {
+                margin-left: 0;
+                /* Réinitialiser la marge à gauche */
+                margin-top: 10px;
+                /* Ajuster la marge supérieure */
+                text-align: center;
+                /* Centrer les éléments */
+            }
+
+            .d-flex a {
+                display: block;
+                /* Afficher les liens comme des blocs */
+                margin-bottom: 10px;
+                /* Espacement entre les liens */
+            }
+
+            .d-flex img {
+                margin: 0 auto;
+                /* Centrer l'icône USFlag */
+            }
         }
     </style>
+    <link href="public/css/.css" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Contenu de la page welcome ici -->
     <div class="content">
         <!-- Ajoutez ici votre contenu principal -->
     </div>
