@@ -1,7 +1,9 @@
+
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="public/css/.css" rel="stylesheet">
+    <!-- <link href="public/css/.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
 </head>
 
@@ -11,7 +13,7 @@
     <div class="row">
         <div class="col-lg-6">
             <!-- Image du titre en haut à gauche -->
-            <br><br><img src="public/assets/images/ModNiaTitle.png" class="img-fluid" style="max-width: 100%; max-height: 30vh;">
+            <br><br><img src="./public/assets/images/ModNiaTitle.PNG" class="img-fluid" style="max-width: 100%; max-height: 30vh;">
             <!-- Texte du paragraphe sous le titre -->
             <p class="roboto-font text-justify" style="max-width: 100%;"><br>Président et fondateur de Laniak Basketball Academy, Modibo Niakate
                 est un coach reconnu pour sa rigueur et son goût de l’effort.<br><br>
@@ -29,13 +31,23 @@
         </div>
         <div class="col-lg-6">
             <!-- Image à droite du titre -->
-            <img src="public/assets/images/PhotoAccueil.png" class="img-fluid" style="max-width: 100%;">
+            <img src="./public/assets/images/PhotoAccueil.PNG" class="img-fluid" style="max-width: 100%;">
         </div>
     </div>
 
+    <style>
+        .roboto-font {
+    font-family: 'Roboto', sans-serif;
+}
+    </style>
+
     <footer>
         <div class="container-fluid">
+        <footer>
+        <div class="container-fluid">
             <?php include_once("views/common/footer.php"); ?>
+        </div>
+    </footer>
         </div>
     </footer>
 

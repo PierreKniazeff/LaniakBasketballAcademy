@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
+
 
 <head>
   <meta charset="utf-8">
@@ -20,5 +19,26 @@
     </div>
   </header>
 </body>
+<style>
+  .navbar {
+    background-color: transparent !important;
+  }
+
+  /* Ajoutez cette règle pour positionner le header fixe en haut de la page */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Assurez-vous que le header est au-dessus de tout le contenu */
+  }
+
+  /* Ajoutez cette règle pour limiter la largeur du container */
+  .custom-container {
+    max-width: 1200px; /* Définissez la largeur maximale que vous souhaitez */
+    margin: 0 auto; /* Centrez le container */
+  }
+</style>
 
 </html>
+

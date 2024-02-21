@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
+
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
+    <!-- <link href="public/css/.css" rel="stylesheet"> -->
     <!-- Style pour le fond -->
     <style>
         html,
@@ -15,7 +15,7 @@
         }
 
         body {
-            background-image: url('public/assets/images/PageAccueil.jpg');
+            background-image: url('./public/assets/images/PageAccueil.jpg');
             background-size: 100% 100%;
             /* Taille initiale de l'image pour les écrans supérieurs à 992px */
             background-position: center;
@@ -74,12 +74,41 @@
             /* Espacement vers la droite */
         }
 
+        /* Styles communs pour la barre de navigation */
+        .navbar-nav .nav-link {
+            font-size: 1em;
+        }
+
+        .navbar-toggler {
+            font-size: 1.5em;
+        }
+
+        .navbar-toggler-icon {
+            font-size: 2em;
+        }
+
+        .navbar {
+            margin-top: -25px;
+        }
+
+        /* Style pour les liens de navigation actifs sur les pages autres que welcome */
+        body:not(.welcome-page) .navbar-nav .nav-item.active .nav-link {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        /* Styles spécifiques à la page welcome */
+        .welcome-page .nav-link {
+            color: black; /* Couleur de texte par défaut */
+        }
+
+        /* Media queries si nécessaire */
         @media (max-width: 600px) {
 
-            /* Pour les écrans inférieurs à 992px, ajustez la taille de l'image pour qu'elle soit entièrement visible sans être déformée */
-            body {
-                background-size: contain;
-            }
+            /* Pour les écrans inférieurs à 600px, ajustez la taille de l'image pour qu'elle soit entièrement visible sans être déformée */
+         body {
+    background-attachment: local;
+}
 
             .d-flex {
                 margin-left: 0;
@@ -103,7 +132,7 @@
             }
         }
     </style>
-    <link href="public/css/.css" rel="stylesheet">
+  
 </head>
 
 <body>
