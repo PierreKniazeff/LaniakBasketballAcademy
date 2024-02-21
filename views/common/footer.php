@@ -13,7 +13,7 @@
       <li class="nav-item"><a class="nav-link" href="https://www.youtube.com/watch?v=hpxM3jMlIVs"><i class="bi bi-youtube"></i></a></li>
       <li class="nav-item"><a class="nav-link" href="https://www.instagram.com/laniakbasketballacademy/?next=%2Fneozaka%2Ffeed%2F&hl=fr"><i class="bi bi-instagram"></i></a></li>
       <li class="nav-item">
-        <a class="nav-link" href="lien_vers_contact">
+        <a class="nav-link" href="views/contact.view.php">
           <i class="bi bi-envelope"></i>
           <span class="ms-2">Info Contact</span>
         </a>
@@ -46,5 +46,3 @@
     </style>
   </footer>
 </div>
-
-
