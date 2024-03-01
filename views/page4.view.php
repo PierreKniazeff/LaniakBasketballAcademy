@@ -1,4 +1,6 @@
 
+<link href="public/css/.css" rel="stylesheet">
+
 <h1 class="roboto-font">Galerie Photos</h1>
 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="4000">
     <div class="carousel-inner">

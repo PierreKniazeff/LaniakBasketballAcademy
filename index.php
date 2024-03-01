@@ -1,6 +1,6 @@
 <?php
 session_start();
-define("URL",str_replace("index.php","",(isset($_SERVER['https'])? "https":"http")."://".$_SERVER['HTTP_HOST'].$_SERVER
+define("URL", str_replace("index.php", "", (isset($_SERVER['https']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER
 ['PHP_SELF']));
 require_once("./controllers/MainController.controller.php");
 $mc = new MainController();
@@ -29,14 +29,24 @@ try {
         case 'page3':
             $mc->page3();
             break;
-            case 'page4':
-                $mc->page4();
-                break;
+        case 'page4':
+            $mc->page4();
+            break;
+        case 'contact':
+            $mc->contact();
+            break;
+        case 'inscription':
+            $mc->inscription();
+            break;
+        case 'connexion':
+            $mc->connexion();
+            break;
+
         default:
             throw new Exception("<h2>La page n'existe pas</h2>");
     }
 } catch (Exception $e) {
-   $mc->pageErreur($e->getMessage());
+    $mc->pageErreur($e->getMessage());
 
 }
 

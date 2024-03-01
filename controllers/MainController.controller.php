@@ -43,7 +43,7 @@ $this->genererPage($data_page);
 public function page1()
 {
 $data_page = [
-"page_title" => "A propos", // Modifié ici
+"page_title" => "A propos", 
 "page_description" => "Description de la page A propos",
 "view" => "./views/page1.view.php",
 "template" => "views/common/template.php"
@@ -54,7 +54,7 @@ $this->genererPage($data_page);
 public function page2()
 {
 $data_page = [
-"page_title" => "Programmes et Stages", // Modifié ici
+"page_title" => "Programmes et Stages", 
 "page_description" => "Description de la page Programmes et Stages",
 "view" => "./views/page2.view.php",
 "template" => "views/common/template.php"
@@ -65,7 +65,7 @@ $this->genererPage($data_page);
 public function page3()
 {
 $data_page = [
-"page_title" => "Evénements et actualités", // Modifié ici
+"page_title" => "Evénements et actualités", 
 "page_description" => "Description de la page Evénements et actualités",
 "view" => "./views/page3.view.php",
 "template" => "views/common/template.php"
@@ -76,9 +76,42 @@ $this->genererPage($data_page);
 public function page4()
 {
 $data_page = [
-"page_title" => "Galerie", // Modifié ici
+"page_title" => "Galerie", 
 "page_description" => "Description de la page Galerie",
 "view" => "./views/page4.view.php",
+"template" => "views/common/template.php"
+];
+$this->genererPage($data_page);
+}
+
+public function contact()
+{
+$data_page = [
+"page_title" => "Contact", 
+"page_description" => "Description de la page Contact",
+"view" => "./views/contact.view.php",
+"template" => "views/common/template.php"
+];
+$this->genererPage($data_page);
+}
+
+public function inscription()
+{
+$data_page = [
+"page_title" => "Inscription", 
+"page_description" => "Description de la page Inscription",
+"view" => "./views/inscription.view.php",
+"template" => "views/common/template.php"
+];
+$this->genererPage($data_page);
+}
+
+public function connexion()
+{
+$data_page = [
+"page_title" => "Connexion", 
+"page_description" => "Description de la page Connexion",
+"view" => "./views/connexion.view.php",
 "template" => "views/common/template.php"
 ];
 $this->genererPage($data_page);

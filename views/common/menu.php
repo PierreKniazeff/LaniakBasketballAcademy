@@ -2,19 +2,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre Titre de Page</title>
-
-    <!-- Inclure d'autres fichiers CSS si nécessaire -->
 </head>
 
 <body>
 
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg align-items-center border-bottom-0 welcome-page">
+    <nav class="navbar navbar-expand-lg align-items-center border-bottom-0 welcome-page">
             <?php
             // Vérifie si la page actuelle n'est pas la page welcome
             if ($page_title !== 'Welcome') {
                 // Affiche le logo à gauche de la barre de navigation
-                echo '<img src="public/assets/images/logo.PNG" width="140px" height="140px" alt="Logo" style="margin-right: 20px;" class="logolaniak move-down">';
+                echo '<img src="./public/assets/images/logo1.PNG" width="140px" height="140px" alt="Logo" style="margin-right: 20px;" class="logolaniak move-down">';
             }
             ?>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -49,15 +47,23 @@
                         echo 'active'; ?>">
                         <a class="nav-link" href="page4">Galerie</a>
                     </li>
+                    <li class="nav-item <?php if ($page_title === 'Contact')
+                        echo 'active'; ?>">
+                        <a class="nav-link" href="contact">Contact</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
-                    <img src="<?php echo URL; ?>./public/assets/images/USflag.PNG" alt="US Flag" width="30px"
-                        height="20px" style="margin-right: 10px;">
+                    <img src="./public/assets/images/USflag.PNG" alt="US Flag" width="30px" height="20px"
+                        style="margin-right: 10px;">
+
                     <a href="inscription" class="me-2 text-danger"><i class="bi bi-person-plus"></i>Inscription</a>
+
                     <a href="connexion" class="text-link"><i class="bi bi-person"></i>Connexion</a>
                 </div>
             </div>
         </nav>
+    </div>
+
     </div>
 
     <style>
@@ -102,7 +108,6 @@
 
 
 
-
         /* Media queries si nécessaire */
         @media (max-width: 1200px) {
             .navbar-nav .nav-link {
@@ -128,6 +133,7 @@
             color: #ffffff;
         }
     </style>
+
 
 </body>
 

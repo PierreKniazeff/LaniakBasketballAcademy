@@ -1,3 +1,5 @@
+<link href="public/css/.css" rel="stylesheet">
+
 <body>
     <div class="container">
         <div class="row">

@@ -1,3 +1,5 @@
+<link href="public/css/.css" rel="stylesheet">
+
 <!DOCTYPE html>
 <html lang="en">
 
