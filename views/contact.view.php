@@ -1,7 +1,7 @@
 <link href="public/css/.css" rel="stylesheet">
 
 <?php
-require_once "config/db.php";
+require_once "controllers/db.php";
 
 $database = new db();
 $database->connect();
@@ -93,8 +93,8 @@ if ($messageSent) {
         }
 
         .contact-form {
-            background-color: #F5F5F5;
-            /* Gris clair pour le fond du formulaire */
+            background-color: #CFD8DC ;
+            /* Couleur pour le fond du formulaire */
             flex: 1;
             /* Flexibilité pour la mise en page responsive */
             margin: 20px;

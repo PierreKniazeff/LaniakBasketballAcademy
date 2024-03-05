@@ -7,7 +7,7 @@
                 <h1>Descriptif des Programmes</h1><br><br>
             </div>
             <?php
-            $pdo = require 'config/pdo.php';
+            $pdo = require 'controllers/pdo.php';
             $sql = 'SELECT * FROM programmes';
             $stmt = $pdo->query($sql);
             $formations = $stmt->fetchAll(PDO::FETCH_ASSOC);
