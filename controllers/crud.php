@@ -9,73 +9,74 @@ class CRUD
     public function __construct()
     {
         $config = require('config/database.php');
-        $this->pdo = new PDO("mysql:host=" . $config['host'] . ";dbname=" . $config['database'], $config['user'], $config['password']);
+        $this->pdo = new PDO("mysql:host=" . $config['host'] . ";dbname=" . $config['database'], $config['user'], $config['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->pdo->exec("set names utf8");
+        session_start(); // Démarre la session ici
     }
 
-    public function createUser(User $user, $userId)
+    public function createUser(User $user)
     {
-        // Génération et stockage du code de vérification
-        $verification_code = $this->generateVerificationCode();
-        $this->storeVerificationCodeInDatabase($userId, $verification_code);
-
+        // Validation des données du formulaire
         if ($user->getPassword() !== $user->getConfirmPassword()) {
             return "Les mots de passe ne correspondent pas.";
         }
 
-        $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+        // Insertion des données dans la base de données
+        try {
+            // Génération et stockage temporaire du code de vérification
+            $verification_code = rand(100000, 999999);
+            $_SESSION['verification_code'] = $verification_code;
 
-        $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel, date_naissance, genre, taille, poids, club, niveau_championnat, poste, objectifs, password, created_at, verification_code) VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, :taille, :poids, :club, :niveau_championnat, :poste, :objectifs, :password, NOW(), :verification_code)");
+            $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel, date_naissance, genre, taille, poids, club, niveau_championnat, poste, objectifs, password, created_at, verification_code) VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, :taille, :poids, :club, :niveau_championnat, :poste, :objectifs, :password, NOW(), :verification_code)");
 
-        $prenom = $user->getPrenom();
-        $nom = $user->getNom();
-        $email = $user->getEmail();
-        $tel = $user->getTel();
-        $date_naissance = $user->getDateNaissance();
-        $genre = $user->getGenre();
-        $taille = $user->getTaille();
-        $poids = $user->getPoids();
-        $club = $user->getClub();
-        $niveau_championnat = $user->getNiveauChampionnat();
-        $poste = $user->getPoste();
-        $objectifs = $user->getObjectifs();
-        
-        $stmt->bindParam(':prenom', $prenom);
-        $stmt->bindParam(':nom', $nom);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':tel', $tel);
-        $stmt->bindParam(':date_naissance', $date_naissance);
-        $stmt->bindParam(':genre', $genre);
-        $stmt->bindParam(':taille', $taille);
-        $stmt->bindParam(':poids', $poids);
-        $stmt->bindParam(':club', $club);
-        $stmt->bindParam(':niveau_championnat', $niveau_championnat);
-        $stmt->bindParam(':poste', $poste);
-        $stmt->bindParam(':objectifs', $objectifs);
-        $stmt->bindParam(':password', $hashedPassword);
-        $stmt->bindParam(':verification_code', $verification_code);
+            $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
 
-        if ($stmt->execute()) {
+            $prenom = $user->getPrenom();
+            $nom = $user->getNom();
+            $email = $user->getEmail();
+            $tel = $user->getTel();
+            $date_naissance = $user->getDateNaissance();
+            $genre = $user->getGenre();
+            $taille = $user->getTaille();
+            $poids = $user->getPoids();
+            $club = $user->getClub();
+            $niveau_championnat = $user->getNiveauChampionnat();
+            $poste = $user->getPoste();
+            $objectifs = $user->getObjectifs();
+
+            $stmt->bindParam(':prenom', $prenom);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':tel', $tel);
+            $stmt->bindParam(':date_naissance', $date_naissance);
+            $stmt->bindParam(':genre', $genre);
+            $stmt->bindParam(':taille', $taille);
+            $stmt->bindParam(':poids', $poids);
+            $stmt->bindParam(':club', $club);
+            $stmt->bindParam(':niveau_championnat', $niveau_championnat);
+            $stmt->bindParam(':poste', $poste);
+            $stmt->bindParam(':objectifs', $objectifs);
+            $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':verification_code', $verification_code);
+
+            $stmt->execute();
+
+            // Envoi du code de vérification à l'utilisateur par e-mail
             $this->sendVerificationEmail($email, $verification_code);
-            return "Le formulaire a été soumis avec succès. Vous allez recevoir un mail avec un code de vérification à saisir pour finaliser votre inscription";
-        } else {
-            return "Une erreur s'est produite lors de l'inscription, veuillez réessayer.";
+
+            return "Le formulaire a été soumis avec succès.\n\nUn e-mail contenant un code de vérification vous a été envoyé.\n\nVeuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.";
+        } catch (PDOException $e) {
+            return "Une erreur s'est produite lors de l'inscription, veuillez réessayer.\n\n";
         }
     }
-
-    function generateVerificationCode() {
-        // Génération aléatoire d'un code de vérification à 6 chiffres
-        $verificationCode = rand(100000, 999999);
-        return $verificationCode;
-    }
-
-    public function storeVerificationCodeInDatabase($userId, $verification_code)
+    public function verifyVerificationCode($verificationCode)
     {
-        $stmt = $this->pdo->prepare("UPDATE inscription SET verification_code = :verification_code WHERE id = :userId");
-        $stmt->bindParam(':userId', $userId);
-        $stmt->bindParam(':verification_code', $verification_code);
-        $stmt->execute();
+        // Comparaison du code saisi par l'utilisateur avec celui stocké temporairement
+        if ($_SESSION['verification_code'] == $verificationCode) {
+            return "Code de vérification correct. Votre inscription est confirmée.\n\n";
+        } else {
+            return "Code de vérification incorrect. Veuillez réessayer.\n\n";
+        }
     }
 
     public function sendVerificationEmail($email, $verification_code)
@@ -83,25 +84,11 @@ class CRUD
         $to = $email;
         $subject = 'Code de vérification pour votre inscription';
         $message = 'Votre code de vérification est : ' . $verification_code;
-        $headers = "From: laniakbasketballacademy@gmail.com";
+        $headers = "From: laniakbasketballacademy@gmail.com\r\n";
+        $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+        $headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
         mail($to, $subject, $message, $headers);
     }
-    public function verifyVerificationCode($userId, $verificationCode)
-{
-    $stmt = $this->pdo->prepare("SELECT verification_code FROM inscription WHERE id = :userId");
-    $stmt->bindParam(':userId', $userId);
-    $stmt->execute();
-    $storedCode = $stmt->fetchColumn();
-
-    if ($storedCode == $verificationCode) {
-        // Code de vérification correct, marquer l'utilisateur comme confirmé (par exemple)
-        return "Code de vérification correct. Votre inscription est confirmée.";
-    } else {
-        // Code de vérification incorrect
-        return "Code de vérification incorrect. Veuillez réessayer.";
-    }
 }
 
-}
-?>
