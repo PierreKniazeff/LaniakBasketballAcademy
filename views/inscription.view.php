@@ -1,6 +1,9 @@
 <?php
 session_start(); // Démarre la session au tout début du script
 header('Content-Type: text/html; charset=UTF-8');
+require_once("views/common/header.php");
+require_once('models/User.class.php');
+require_once('controllers/crud.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -12,16 +15,51 @@ header('Content-Type: text/html; charset=UTF-8');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link href="public/css/.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
 
+    <!-- Styles CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F5F5F5;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+            /* Pour cacher par défaut */
+        }
+
+        .overlay-content {
+            width: 50%;
+            max-width: 400px;
+            margin: 20% auto;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .invalid {
+            color: red;
+            
+        }
+
+        .valid {
+            color: green;
+            
+        }
+    </style>
+</head>
 
 <body>
 
     <?php
-    require_once("views/common/header.php");
-    require_once('models/User.class.php');
-    require_once('controllers/crud.php');
-
     $db = new CRUD();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -30,7 +68,7 @@ header('Content-Type: text/html; charset=UTF-8');
             $verificationCode = $_POST['verification_code'];
 
             $verifyMessage = $db->verifyVerificationCode($verificationCode);
-            echo htmlspecialchars($verifyMessage);
+            echo "<div class='{$verifyMessage['class']}'>{$verifyMessage['message']}</div>";
         } else {
             // Validation côté serveur pour le mot de passe
             $password = $_POST['password'];
@@ -39,7 +77,7 @@ header('Content-Type: text/html; charset=UTF-8');
             $specialChars = preg_match('@[^\w]@', $password);
 
             if (!$uppercase || !$number || !$specialChars || strlen($password) < 8) {
-                echo "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
+                echo "<div class='error'>Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.</div>";
             } else {
                 // Si le formulaire est soumis pour l'inscription (non validation du code de vérification)
                 $user = new User(
@@ -59,16 +97,15 @@ header('Content-Type: text/html; charset=UTF-8');
                     $_POST['confirm_password']
                 );
 
-                $message = $db->createUser($user);
-                echo htmlspecialchars($message);
+                $result = $db->createUser($user);
+                echo "<div class='{$result['class']}'>{$result['message']}</div>";
             }
         }
     }
     ?>
 
-
     <!-- Affichage du message de vérification -->
-    <?php if ($message === "Le formulaire a été soumis avec succès.\n\nUn e-mail contenant un code de vérification vous a été envoyé.\n\nVeuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.") : ?>
+    <?php if ($result['message'] === "Le formulaire a été soumis avec succès. Un e-mail contenant un code de vérification vous a été envoyé. Veuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.") : ?>
         <div class="mb-3">
         </div>
         <button id="open-overlay-button" class="btn btn-danger">Saisir le code de vérification</button><br><br>
@@ -92,7 +129,6 @@ header('Content-Type: text/html; charset=UTF-8');
             });
         </script>
     <?php endif; ?>
-
     <!-- Affichage du formulaire d'inscription -->
 
     <div class="container">
@@ -225,44 +261,6 @@ header('Content-Type: text/html; charset=UTF-8');
     </div>
 
     <!-- Après le formulaire -->
-
-
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #F5F5F5;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-            /* Pour cacher par défaut */
-        }
-
-        .overlay-content {
-            width: 50%;
-            max-width: 400px;
-            margin: 20% auto;
-            padding: 20px;
-            background: #fff;
-        }
-
-        .invalid {
-            color: red;
-        }
-
-        .valid {
-            color: green;
-        }
-    </style>
 
     <?php require_once("views/common/footer.php"); ?>
 

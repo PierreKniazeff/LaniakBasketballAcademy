@@ -12,8 +12,6 @@ class CRUD
         $this->pdo = new PDO("mysql:host=" . $config['host'] . ";dbname=" . $config['database'], $config['user'], $config['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         session_start(); // Démarre la session ici
-
-
     }
 
     public function emailExists($email)
@@ -25,24 +23,31 @@ class CRUD
         return $count > 0;
     }
 
-
     public function createUser(User $user)
     {
+        // Initialisation du tableau associatif pour le message de retour
+        $result = array();
+
         // Validation des données du formulaire
         if ($user->getPassword() !== $user->getConfirmPassword()) {
-            return "Les mots de passe ne correspondent pas.";
+            $result['message'] = "Les mots de passe ne correspondent pas.";
+            $result['class'] = "error";
+            return $result;
         }
 
         // Vérification de la validité de l'adresse email
         if (!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
-            return "L'adresse email n'est pas valide.";
+            $result['message'] = "L'adresse email n'est pas valide.";
+            $result['class'] = "error";
+            return $result;
         }
 
         // Vérification si l'e-mail existe déjà
         if ($this->emailExists($user->getEmail())) {
-            return "L'e-mail saisi est déjà utilisé. Veuillez en choisir un autre.";
+            $result['message'] = "L'e-mail saisi est déjà utilisé. Veuillez en choisir un autre.";
+            $result['class'] = "error";
+            return $result;
         }
-
 
         // Insertion des données dans la base de données
         try {
@@ -87,19 +92,30 @@ class CRUD
             // Envoi du code de vérification à l'utilisateur par e-mail
             $this->sendVerificationEmail($email, $verification_code);
 
-            return "Le formulaire a été soumis avec succès.\n\nUn e-mail contenant un code de vérification vous a été envoyé.\n\nVeuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.";
+            $result['message'] = "Le formulaire a été soumis avec succès. Un e-mail contenant un code de vérification vous a été envoyé. Veuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.";
+            $result['class'] = "success";
+            return $result;
         } catch (PDOException $e) {
-            return "Une erreur s'est produite lors de l'inscription, veuillez réessayer.\n\n";
+            $result['message'] = "Une erreur s'est produite lors de l'inscription, veuillez réessayer.";
+            $result['class'] = "error";
+            return $result;
         }
     }
+
     public function verifyVerificationCode($verificationCode)
     {
+        // Initialisation du tableau associatif pour le message de retour
+        $result = array();
+
         // Comparaison du code saisi par l'utilisateur avec celui stocké temporairement
         if ($_SESSION['verification_code'] == $verificationCode) {
-            return "Code de vérification correct. Votre inscription est confirmée.\n\n";
+            $result['message'] = "Code de vérification correct. Votre inscription est confirmée.";
+            $result['class'] = "success";
         } else {
-            return "Code de vérification incorrect. Veuillez réessayer.\n\n";
+            $result['message'] = "Code de vérification incorrect. Veuillez réessayer.";
+            $result['class'] = "error";
         }
+        return $result;
     }
 
     public function sendVerificationEmail($email, $verification_code)
@@ -114,3 +130,25 @@ class CRUD
         mail($to, $subject, $message, $headers);
     }
 }
+
+// Styles CSS
+echo "
+<style>
+.error, .success {
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.error {
+    background-color: #ffcccc;
+    color: #cc0000;
+}
+
+.success {
+    background-color: #ccffcc;
+    color: #006600;
+}
+</style>";
+
