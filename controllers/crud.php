@@ -111,6 +111,15 @@ class CRUD
         if ($_SESSION['verification_code'] == $verificationCode) {
             $result['message'] = "Code de vérification correct. Votre inscription est confirmée.";
             $result['class'] = "success";
+
+            // Récupérer les données de l'utilisateur depuis la base de données
+            $stmt = $this->pdo->prepare("SELECT * FROM inscription WHERE verification_code = :verification_code");
+            $stmt->bindParam(':verification_code', $verificationCode);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Envoi du mail avec les données de l'utilisateur
+            $this->sendConfirmationEmail($user);
         } else {
             $result['message'] = "Code de vérification incorrect. Veuillez réessayer.";
             $result['class'] = "error";
@@ -124,6 +133,33 @@ class CRUD
         $subject = 'Code de vérification pour votre inscription';
         $message = 'Votre code de vérification est : ' . $verification_code;
         $headers = "From: laniakbasketballacademy@gmail.com\r\n";
+        $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+        $headers .= "Content-Transfer-Encoding: 8bit\r\n";
+
+        mail($to, $subject, $message, $headers);
+    }
+
+    public function sendConfirmationEmail($user)
+    {
+        $to = 'kniazeff.pierre@hotmail.fr';
+        $subject = 'Nouvelle inscription sur votre site';
+        $message = "Bonjour,\n\nUne nouvelle inscription a été confirmée sur votre site. Voici les détails :\n\n" .
+                   "Prénom: {$user['prenom']}\n" .
+                   "Nom: {$user['nom']}\n" .
+                   "Email: {$user['email']}\n" .
+                   "Téléphone: {$user['tel']}\n" .
+                   "Date de naissance: {$user['date_naissance']}\n" .
+                   "Genre: {$user['genre']}\n" .
+                   "Taille: {$user['taille']}\n" .
+                   "Poids: {$user['poids']}\n" .
+                   "Club: {$user['club']}\n" .
+                   "Niveau de championnat: {$user['niveau_championnat']}\n" .
+                   "Poste: {$user['poste']}\n" .
+                   "Objectifs: {$user['objectifs']}\n\n" .
+                   "Merci.";
+
+        $headers = "From: laniakbasketballacademy@gmail.com\r\n";
+        $headers .= "Reply-To: laniakbasketballacademy@gmail.com\r\n";
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
         $headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
