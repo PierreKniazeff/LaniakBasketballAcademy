@@ -14,6 +14,7 @@ header('Content-Type: text/html; charset=UTF-8');
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
+
 <body>
 
     <?php
@@ -117,7 +118,7 @@ header('Content-Type: text/html; charset=UTF-8');
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
                     if (!emailRegex.test(emailInput)) {
-                        this.setCustomValidity('Veuillez entrer une adresse e-mail valide au format monadresse@example.com.');
+                        this.setCustomValidity('Veuillez entrer une adresse e-mail valide.');
                     } else {
                         this.setCustomValidity('');
                     }

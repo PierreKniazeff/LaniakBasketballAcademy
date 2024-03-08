@@ -12,7 +12,19 @@ class CRUD
         $this->pdo = new PDO("mysql:host=" . $config['host'] . ";dbname=" . $config['database'], $config['user'], $config['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         session_start(); // Démarre la session ici
+
+
     }
+
+    public function emailExists($email)
+    {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM inscription WHERE email = :email");
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+
 
     public function createUser(User $user)
     {
@@ -20,6 +32,17 @@ class CRUD
         if ($user->getPassword() !== $user->getConfirmPassword()) {
             return "Les mots de passe ne correspondent pas.";
         }
+
+        // Vérification de la validité de l'adresse email
+        if (!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+            return "L'adresse email n'est pas valide.";
+        }
+
+        // Vérification si l'e-mail existe déjà
+        if ($this->emailExists($user->getEmail())) {
+            return "L'e-mail saisi est déjà utilisé. Veuillez en choisir un autre.";
+        }
+
 
         // Insertion des données dans la base de données
         try {
@@ -91,4 +114,3 @@ class CRUD
         mail($to, $subject, $message, $headers);
     }
 }
-
