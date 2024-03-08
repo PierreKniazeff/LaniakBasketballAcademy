@@ -6,6 +6,10 @@ header('Content-Type: text/html; charset=UTF-8');
 <html lang="fr">
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link href="public/css/.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -79,15 +83,14 @@ header('Content-Type: text/html; charset=UTF-8');
                 </form>
             </div>
         </div>
-    <?php endif; ?>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('open-overlay-button').addEventListener('click', function() {
-                document.getElementById('verification-overlay').style.display = 'block';
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('open-overlay-button').addEventListener('click', function() {
+                    document.getElementById('verification-overlay').style.display = 'block';
+                });
             });
-        });
-    </script>
+        </script>
+    <?php endif; ?>
 
     <!-- Affichage du formulaire d'inscription -->
 
@@ -105,7 +108,21 @@ header('Content-Type: text/html; charset=UTF-8');
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" id="email" name="email" class="form-control border-dark" required value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
+                <small id="emailHelp" class="form-text text-muted">Veuillez entrer une adresse e-mail valide.</small>
             </div>
+
+            <script>
+                document.getElementById('email').addEventListener('input', function() {
+                    const emailInput = this.value.trim();
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                    if (!emailRegex.test(emailInput)) {
+                        this.setCustomValidity('Veuillez entrer une adresse e-mail valide au format monadresse@example.com.');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+            </script>
             <div class="mb-3">
                 <label for="tel" class="form-label">Tel</label>
                 <input type="tel" id="tel" name="tel" class="form-control border-dark" required value="<?php echo isset($_POST['tel']) ? htmlspecialchars($_POST['tel']) : ''; ?>">
@@ -150,6 +167,7 @@ header('Content-Type: text/html; charset=UTF-8');
             <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe</label>
                 <input type="password" id="password" name="password" class="form-control border-dark" required>
+                <span toggle="#password" class="fa fa-fw fa-eye field-icon"></span><br>
                 <!-- Instructions pour les critères du mot de passe ajoutées ici -->
                 <div id="passwordCriteria" style="margin-top: 10px;">
                     Votre mot de passe doit contenir :
@@ -175,11 +193,30 @@ header('Content-Type: text/html; charset=UTF-8');
                         criteria.number.className = /[0-9]/.test(val) ? 'valid' : 'invalid';
                         criteria.special.className = /[^\w]/.test(val) ? 'valid' : 'invalid';
                     });
+
+                    $(document).ready(function() {
+                        $('.field-icon').on('click', function(e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            var $input = $($this.attr('toggle'));
+
+                            if ($input.attr('type') === 'password') {
+                                $input.attr('type', 'text');
+                                $this.removeClass('fa-eye');
+                                $this.addClass('fa-eye-slash');
+                            } else {
+                                $input.attr('type', 'password');
+                                $this.removeClass('fa-eye-slash');
+                                $this.addClass('fa-eye');
+                            }
+                        });
+                    });
                 </script>
             </div>
             <div class="mb-3">
                 <label for="confirm_password" class="form-label">Confirmation mot de passe</label>
                 <input type="password" id="confirm_password" name="confirm_password" class="form-control border-dark" required>
+                <span toggle="#confirm_password" class="fa fa-fw fa-eye field-icon"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Soumettre le formulaire</button>
