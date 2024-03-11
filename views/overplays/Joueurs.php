@@ -5,7 +5,7 @@
         <div class="col-lg-6">
             <!-- Image du titre en haut à gauche -->
             <br><br>
-            <img src="./public/assets/images/joueurs.PNG" class="img-fluid" alt="Description de l'image">
+            <img src="./public/assets/images/joueurs.jpg" class="img-fluid" alt="Description de l'image">
         </div>
     </div>
 </div>
