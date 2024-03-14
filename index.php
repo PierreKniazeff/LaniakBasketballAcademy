@@ -1,13 +1,11 @@
 <?php
 session_start();
-define("URL", str_replace("index.php", "", (isset($_SERVER['https']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER
-['PHP_SELF']));
+define("URL", str_replace("index.php", "", (isset($_SERVER['https']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']));
 require_once("./controllers/MainController.controller.php");
 $mc = new MainController();
 try {
     if (empty($_GET['page'])) {
         $page = "welcome";
-
     } else {
         $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
         $page = $url[0];
@@ -41,15 +39,15 @@ try {
         case 'connexion':
             $mc->connexion();
             break;
+        case 'confirmation':
+            $mc->confirmation();
+            break;
 
         default:
             throw new Exception("<h2>La page n'existe pas</h2>");
     }
 } catch (Exception $e) {
     $mc->pageErreur($e->getMessage());
-
 }
 
 require_once("views/common/template.php");
-
-?>

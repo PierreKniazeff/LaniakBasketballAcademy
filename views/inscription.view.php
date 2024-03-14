@@ -59,80 +59,50 @@ require_once('controllers/crud.php');
 
 <body>
 
-    <?php
-    $db = new CRUD();
+<?php
+   $db = new CRUD();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Vérifier si le formulaire est soumis pour la validation du code de vérification
-        if (isset($_POST['verification_code'])) {
-            $verificationCode = $_POST['verification_code'];
+   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+       $password = $_POST['password'];
+       $confirmPassword = $_POST['confirm_password'];
+   
+       // Vérifiez ici si le mot de passe et la confirmation correspondent
+       if($password !== $confirmPassword){
+           // Affichez un message d'erreur si les mots de passe ne correspondent pas
+           echo "<div class='error'>Les mots de passe ne correspondent pas!</div>";
+       } else {
+           // Si les mots de passe correspondent, vous pouvez procéder avec la création de l'utilisateur
+           $user = new User(
+               $_POST['prenom'],
+               $_POST['nom'],
+               $_POST['email'],
+               $_POST['tel'],
+               $_POST['date_naissance'],
+               $_POST['genre'],
+               $_POST['taille'],
+               $_POST['poids'],
+               $_POST['club'],
+               $_POST['niveau_championnat'],
+               $_POST['poste'],
+               $_POST['objectifs'],
+               $password // Notez que nous n'envoyons plus confirm_password
+           );
+   
+           $result = $db->createUser($user);
+           echo "<div class='{$result['class']}'>{$result['message']}</div>";
+       }
+   }
+   ?>
 
-            $verifyMessage = $db->verifyVerificationCode($verificationCode);
-            echo "<div class='{$verifyMessage['class']}'>{$verifyMessage['message']}</div>";
-        } else {
-            // Validation côté serveur pour le mot de passe
-            $password = $_POST['password'];
-            $uppercase = preg_match('@[A-Z]@', $password);
-            $number    = preg_match('@[0-9]@', $password);
-            $specialChars = preg_match('@[^\w]@', $password);
 
-            if (!$uppercase || !$number || !$specialChars || strlen($password) < 8) {
-                echo "<div class='error'>Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.</div>";
-            } else {
-                // Si le formulaire est soumis pour l'inscription (non validation du code de vérification)
-                $user = new User(
-                    $_POST['prenom'],
-                    $_POST['nom'],
-                    $_POST['email'],
-                    $_POST['tel'],
-                    $_POST['date_naissance'],
-                    $_POST['genre'],
-                    $_POST['taille'],
-                    $_POST['poids'],
-                    $_POST['club'],
-                    $_POST['niveau_championnat'],
-                    $_POST['poste'],
-                    $_POST['objectifs'],
-                    $_POST['password'],
-                    $_POST['confirm_password']
-                );
-
-                $result = $db->createUser($user);
-                echo "<div class='{$result['class']}'>{$result['message']}</div>";
-            }
-        }
-    }
-    ?>
-
-    <!-- Affichage du message de vérification -->
-    <?php if ($result['message'] === "Le formulaire a été soumis avec succès. Un e-mail contenant un code de vérification vous a été envoyé. Veuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.") : ?>
-        <div class="mb-3">
-        </div>
-        <button id="open-overlay-button" class="btn btn-danger">Saisir le code de vérification</button><br><br>
-        <div id="verification-overlay" class="overlay">
-            <div class="overlay-content">
-                <h2>Code de Vérification</h2>
-                <form action="" method="POST" accept-charset="UTF-8">
-                    <div class="mb-3">
-                        <label for="verification_code">Entrez le code de vérification reçu par email :</label>
-                        <input type="text" id="verification_code" name="verification_code" class="form-control border-dark" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Valider le code</button>
-                </form>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                document.getElementById('open-overlay-button').addEventListener('click', function() {
-                    document.getElementById('verification-overlay').style.display = 'block';
-                });
-            });
-        </script>
-    <?php endif; ?>
     <!-- Affichage du formulaire d'inscription -->
 
     <div class="container">
     <h2 class="mb-4">Formulaire d'Inscription</h2>
+
+    <p style="font-style: italic; font-weight: bold; margin-bottom: 15px;">
+        <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser les programmes d'entraînement et d'améliorer votre expérience avec notre service.</strong>
+    </p>
     <form action="" method="POST" accept-charset="UTF-8">
         <div class="mb-3">
             <label for="prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
@@ -244,6 +214,9 @@ require_once('controllers/crud.php');
 
         <button type="submit" class="btn btn-primary">Soumettre le formulaire</button>
     </form>
+    <br><p style="font-style: italic; font-weight: bold; margin-bottom: 15px;">
+        <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser les programmes d'entraînement et d'améliorer votre expérience avec notre service.</strong>
+    </p>
 </div>
 
 <!-- Après le formulaire -->

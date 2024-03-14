@@ -14,12 +14,13 @@ class User {
     private $poste;
     private $objectifs;
     private $password;
-    private $confirm_password;
     private $created_at;
-    private $verification_code;
+    private $confirmed;
+    private $token;
+
     
 
-    public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, $password, $confirm_password, $created_at = null, $verification_code = null) {
+    public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, $password, $created_at = null, $confirmed = 0, $token = null) {
         $this->prenom = $prenom;
         $this->nom = $nom;
         $this->email = $email;
@@ -33,9 +34,9 @@ class User {
         $this->poste = $poste;
         $this->objectifs = $objectifs;
         $this->password = $password;
-        $this->confirm_password = $confirm_password;
         $this->created_at = $created_at;
-        $this->verification_code = $verification_code;
+        $this->confirmed = $confirmed;
+        $this->token = $token;
     }
 
     // Fonctions Getter pour accéder aux valeurs des champs
@@ -89,16 +90,18 @@ class User {
         return $this->password;
     }
 
-    public function getConfirmPassword() {
-        return $this->confirm_password;
-    }
-
     public function getCreatedAt() {
         return $this->created_at;
     }
-    public function getVerificationCode() {
-        return $this->verification_code;
+    public function getConfirmed() {
+        return $this->confirmed;
+    }
+    public function setToken($token) {
+        $this->token = $token;
+    }
+    
+    public function getToken() {
+        return $this->token;
     }
 }
 
-?>

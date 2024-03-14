@@ -117,6 +117,16 @@ $data_page = [
 $this->genererPage($data_page);
 }
 
+public function confirmation()
+{
+$data_page = [
+    "page_title" => "Confirmation", 
+    "page_description" => "Description de la page Connexion",
+    "view" => "./views/confirmation.view.php",
+    "template" => "views/common/template.php"
+    ];
+    $this->genererPage($data_page);
+    }
 public function pageErreur($msg)
 {
 $data_page = [
