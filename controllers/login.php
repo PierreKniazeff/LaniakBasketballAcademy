@@ -6,11 +6,12 @@ error_reporting(E_ALL);
 
 // Inclure le fichier de configuration de la base de données
 $config = require(__DIR__ . '/../config/database.php');
+require_once(__DIR__ . '/../models/User.class.php');
 
 class LoginController
 {
     private $pdo;
- 
+
     public function __construct()
     {
         global $config;
@@ -43,8 +44,35 @@ class LoginController
                 // Vérification du mot de passe hashé
                 if (password_verify($password, $user['password'])) {
                     // L'utilisateur est authentifié
-                    // Vous pouvez créer une session pour l'utilisateur ou définir un cookie
-                    return true;
+                    // Créer une instance de la classe User avec les données récupérées
+                    $user = new User(
+                        $user['prenom'],
+                        $user['nom'],
+                        $user['email'],
+                        $user['tel'],
+                        $user['date_naissance'],
+                        $user['genre'],
+                        $user['taille'],
+                        $user['poids'],
+                        $user['club'],
+                        $user['niveau_championnat'],
+                        $user['poste'],
+                        $user['objectifs'],
+                        $user['password'],
+                        $user['created_at'],
+                        $user['confirmed'],
+                        $user['token']
+                    );
+
+                    // Stocker les informations utilisateur dans la session
+                    $_SESSION['user'] = $user;
+
+                    // Indiquer que l'utilisateur est authentifié
+                    $_SESSION['user_authenticated'] = true;
+
+                    // Afficher les informations de l'utilisateur directement
+                    include_once(__DIR__ . '/../views/utilisateur.view.php');
+                    exit;
                 } else {
                     // Mot de passe incorrect
                     return false;
@@ -77,8 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($email && $password) {
         if ($loginController->loginUser($email, $password)) {
             // L'utilisateur est authentifié
-            // Définir le message de succès
-            $successMessage = "Connexion réussie!";
+            // Pas besoin de message de succès car les informations seront affichées sur cette même page
         } else {
             // L'utilisateur n'est pas authentifié
             // Définir le message d'erreur
@@ -86,11 +113,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -119,14 +144,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <h1>Login</h1>
-    <!-- Afficher le message de succès -->
-    <?php if ($successMessage): ?>
-        <div class="success"><?= $successMessage ?></div>
-    <?php endif; ?>
     <!-- Afficher le message d'erreur -->
     <?php if ($errorMessage): ?>
         <div class="error"><?= $errorMessage ?></div>
     <?php endif; ?>
 </body>
-
 </html>

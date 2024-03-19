@@ -15,7 +15,7 @@
         }
 
         body {
-            background-image: url('./public/assets/images/PageAccueil.jpg');
+            background-image: url('./public/assets/images/PageAccueil3.png');
             background-size: 100% 100%;
             /* Taille initiale de l'image pour les écrans supérieurs à 992px */
             background-position: center;

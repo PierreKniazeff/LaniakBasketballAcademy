@@ -1,4 +1,4 @@
-
+<?php require_once("config.php"); ?>
 
 <head>
   <meta charset="utf-8">

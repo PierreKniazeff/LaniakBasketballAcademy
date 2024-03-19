@@ -17,6 +17,7 @@ class User {
     private $created_at;
     private $confirmed;
     private $token;
+    private $id;
 
     
 
@@ -37,6 +38,8 @@ class User {
         $this->created_at = $created_at;
         $this->confirmed = $confirmed;
         $this->token = $token;
+        
+        
     }
 
     // Fonctions Getter pour accéder aux valeurs des champs
@@ -102,6 +105,10 @@ class User {
     
     public function getToken() {
         return $this->token;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 }
 

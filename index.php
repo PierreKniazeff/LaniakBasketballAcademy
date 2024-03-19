@@ -42,6 +42,9 @@ try {
         case 'confirmation':
             $mc->confirmation();
             break;
+        case 'utilisateur':
+            $mc->utilisateur();
+            break;
 
         default:
             throw new Exception("<h2>La page n'existe pas</h2>");
