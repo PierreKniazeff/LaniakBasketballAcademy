@@ -61,14 +61,14 @@ class LoginController
                         $user['password'],
                         $user['created_at'],
                         $user['confirmed'],
-                        $user['token']
+                        $user['token'],
                     );
 
                     // Stocker les informations utilisateur dans la session
                     $_SESSION['user'] = $user;
 
-                    // Indiquer que l'utilisateur est authentifié
-                    $_SESSION['user_authenticated'] = true;
+                    // Stockage de l'ID utilisateur dans la session
+                    $_SESSION['id'] = $user->getId();
 
                     // Afficher les informations de l'utilisateur directement
                     include_once(__DIR__ . '/../views/utilisateur.view.php');
@@ -86,6 +86,33 @@ class LoginController
             die("Erreur de requête : " . $e->getMessage());
         }
     }
+    public function updateUserField($userEmail, $field, $value)
+{
+    // Vérifier si le champ est autorisé
+    $allowedFields = [
+        'prenom', 'nom', 'email', 'tel',
+        'date_naissance', 'genre', 'taille', 'poids',
+        'club', 'niveau_championnat', 'poste', 'objectifs'
+    ];
+
+    if (!in_array($field, $allowedFields)) {
+        return '<div class="error">Modification non autorisée.</div>';
+    }
+
+    try {
+        // Préparer la requête de mise à jour
+        $sql = "UPDATE inscription SET $field = :value WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':value', $value);
+        $stmt->bindParam(':email', $userEmail);
+        $stmt->execute();
+
+        return '<div class="success">Mise à jour réussie.</div>';
+    } catch (PDOException $e) {
+        return '<div class="error">Échec de la mise à jour : ' . $e->getMessage() . '</div>';
+    }
+}
+
 }
 
 // Utilisation de la classe LoginController
@@ -113,6 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">

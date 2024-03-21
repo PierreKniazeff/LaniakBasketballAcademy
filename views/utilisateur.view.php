@@ -1,7 +1,6 @@
 <?php
 $page_title = 'utilisateur'; // Définition de la variable pour menu.php
 require_once(__DIR__ . '/../views/common/menu.php');
-require_once(__DIR__ . '/../controllers/crud.php');
 ?>
 
 <?php
@@ -11,30 +10,61 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 require_once(__DIR__ . '/../models/User.class.php');
 
+
+// Vérifiez si l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
     header('Location: ../controllers/login.php');
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['field'])) {
-    require_once(__DIR__ . '/../controllers/crud.php');
-
-    // Récupérer l'instance de l'utilisateur courant
-    $user = $_SESSION['user'];
-    $userId = $user->getId();
-    $field = $_POST['field'];
-    $value = $_POST[$field];
-
-    $crud = new CRUD();
-    if ($crud->updateUserField($userId, $field, $value)) {
-        echo json_encode(['success' => true, 'message' => 'Mise à jour réussie']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Échec de la mise à jour']);
-    }
-    exit;
-}
-
 $user = $_SESSION['user'];
+
+// Traitement du formulaire lorsque celui-ci est soumis
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
+    // Récupérez les données du formulaire
+    $prenom = $_POST['prenom'] ?? '';
+    $nom = $_POST['nom'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $tel = $_POST['tel'] ?? '';
+    $date_naissance = $_POST['date_naissance'] ?? '';
+    $genre = $_POST['genre'] ?? '';
+    $taille = $_POST['taille'] ?? '';
+    $poids = $_POST['poids'] ?? '';
+    $club = $_POST['club'] ?? '';
+    $niveau_championnat = $_POST['niveau_championnat'] ?? '';
+    $poste = $_POST['poste'] ?? '';
+    $objectifs = $_POST['objectifs'] ?? '';
+
+    // Vérifiez si l'utilisateur est connecté via son email
+    if (!isset($_SESSION['user_email'])) {
+        // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
+        header('Location: ../controllers/login.php');
+        exit;
+    }
+
+    // Récupération de l'email de l'utilisateur dans la session
+    $email = $_SESSION['user_email'];
+
+    // Effectuez la mise à jour des informations personnelles de l'utilisateur
+    // Utilisez votre méthode updateUserField ou une autre méthode appropriée de votre classe CRUD/UserController
+    $LoginController = new LoginController(); // Remplacez par votre instanciation
+
+    // Mettez à jour chaque champ individuellement
+    $result = $LoginController->updateUserField($email, 'prenom', $prenom);
+    $result .= $LoginController->updateUserField($email, 'nom', $nom);
+    $result .= $LoginController->updateUserField($email, 'tel', $tel);
+    $result .= $LoginController->updateUserField($email, 'date_naissance', $date_naissance);
+    $result .= $LoginController->updateUserField($email, 'genre', $genre);
+    $result .= $LoginController->updateUserField($email, 'taille', $taille);
+    $result .= $LoginController->updateUserField($email, 'poids', $poids);
+    $result .= $LoginController->updateUserField($email, 'club', $club);
+    $result .= $LoginController->updateUserField($email, 'niveau_championnat', $niveau_championnat);
+    $result .= $LoginController->updateUserField($email, 'poste', $poste);
+    $result .= $LoginController->updateUserField($email, 'objectifs', $objectifs);
+
+    // Affichez les résultats de la mise à jour ou les messages de succès/erreur
+    echo $result; // Vous pouvez personnaliser cette sortie en fonction de la réponse de la méthode updateUserField
+}
 ?>
 
 <!DOCTYPE html>
@@ -128,48 +158,6 @@ $user = $_SESSION['user'];
 
     </div>
 
-    <?php
-    // Traitement du formulaire lorsque celui-ci est soumis
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
-        // Récupérez les données du formulaire
-        $prenom = $_POST['prenom'] ?? '';
-        $nom = $_POST['nom'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $tel = $_POST['tel'] ?? '';
-        $date_naissance = $_POST['date_naissance'] ?? '';
-        $genre = $_POST['genre'] ?? '';
-        $taille = $_POST['taille'] ?? '';
-        $poids = $_POST['poids'] ?? '';
-        $club = $_POST['club'] ?? '';
-        $niveau_championnat = $_POST['niveau_championnat'] ?? '';
-        $poste = $_POST['poste'] ?? '';
-        $objectifs = $_POST['objectifs'] ?? '';
-
-        // Effectuez la mise à jour des informations utilisateur
-        // Utilisez votre méthode updateUserField ou une autre méthode appropriée de votre classe CRUD/UserController
-        $crud = new CRUD(); // Remplacez par votre instanciation
-
-        // Remplacez $userId par l'ID de l'utilisateur (vous devez définir $userId)
-        $userId = $_SESSION['user']->getId(); // Supposons que vous stockez l'ID de l'utilisateur dans la session
-
-        // Mettez à jour chaque champ individuellement
-        $result = $crud->updateUserField($userId, 'prenom', $prenom);
-        $result .= $crud->updateUserField($userId, 'nom', $nom);
-        $result .= $crud->updateUserField($userId, 'email', $email);
-        $result .= $crud->updateUserField($userId, 'tel', $tel);
-        $result .= $crud->updateUserField($userId, 'date_naissance', $date_naissance);
-        $result .= $crud->updateUserField($userId, 'genre', $genre);
-        $result .= $crud->updateUserField($userId, 'taille', $taille);
-        $result .= $crud->updateUserField($userId, 'poids', $poids);
-        $result .= $crud->updateUserField($userId, 'club', $club);
-        $result .= $crud->updateUserField($userId, 'niveau_championnat', $niveau_championnat);
-        $result .= $crud->updateUserField($userId, 'poste', $poste);
-        $result .= $crud->updateUserField($userId, 'objectifs', $objectifs);
-
-        // Affichez les résultats de la mise à jour ou les messages de succès/erreur
-        echo $result; // Vous pouvez personnaliser cette sortie en fonction de la réponse de la méthode updateUserField
-    }
-    ?>
     <style>
         /* Styles existants */
         body {
@@ -241,43 +229,52 @@ $user = $_SESSION['user'];
             cursor: not-allowed;
         }
     </style>
+
     <script>
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function() {
                 let inputField = this.previousElementSibling;
                 inputField.readOnly = false;
                 inputField.focus();
-                let oldButtonText = this.innerHTML;
+                let originalValue = inputField.value;
+                let fieldName = this.getAttribute('data-field');
+
                 this.innerHTML = '<i class="fas fa-save"></i>';
 
                 this.onclick = function() {
-                    let data = new URLSearchParams();
-                    data.append(inputField.name, inputField.value);
-                    data.append('field', inputField.name);
+                    let value = inputField.value;
 
-                    fetch('../controllers/crud.php', {
+                    fetch('../controllers/login.php', {
                             method: 'POST',
-                            body: data,
+                            body: JSON.stringify({
+                                field: fieldName,
+                                value: value
+                            }),
                             headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
+                                'Content-Type': 'application/json'
                             }
                         })
-                        .then(response => response.text())
-                        .then(result => {
-                            if (result.includes('success')) {
-                                alert('Mise à jour réussie');
+                        .then(response => {
+                            if (response.ok) {
+                                alert('Mise à jour réussie!');
                                 inputField.readOnly = true;
-                                this.innerHTML = oldButtonText;
+                                this.innerHTML = '<i class="fas fa-pen"></i>';
+                                // Réinitialiser le bouton à l'icône d'édition
                             } else {
-                                alert('Échec de la mise à jour');
+                                alert('Erreur lors de la mise à jour. Veuillez réessayer.');
+                                inputField.value = originalValue;
+                                // Restaurer la valeur précédente en cas d'erreur
                             }
                         })
-                        .catch(error => alert('Erreur : ' + error));
+                        .catch(error => {
+                            alert('Une erreur s\'est produite : ' + error);
+                            inputField.value = originalValue;
+                            // Gérer les erreurs du serveur
+                        });
                 };
             });
         });
     </script>
-
 </body>
 
 </html>

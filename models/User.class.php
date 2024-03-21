@@ -1,6 +1,5 @@
 <?php
 class User {
-    // Champs existants
     private $prenom;
     private $nom;
     private $email;

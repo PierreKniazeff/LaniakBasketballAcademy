@@ -249,81 +249,9 @@ class CRUD
     }
 
      // Ajout d'une nouvelle méthode pour mettre à jour les informations de l'utilisateur
-    public function updateUserField($userId, $field, $value)
-    {
-        // Vérifier si le champ est autorisé
-        $allowedFields = [
-            'prenom', 'nom', 'email', 'tel',
-            'date_naissance', 'genre', 'taille', 'poids',
-            'club', 'niveau_championnat', 'poste', 'objectifs'
-        ];
-
-        if (!in_array($field, $allowedFields)) {
-            return '<div class="error">Modification non autorisée.</div>';
-        }
-
-        try {
-            // Préparer la requête de mise à jour
-            $sql = "UPDATE inscription SET ";
-            switch ($field) {
-                case 'prenom':
-                    $sql .= "prenom = :value";
-                    break;
-                case 'nom':
-                    $sql .= "nom = :value";
-                    break;
-                case 'email':
-                    $sql .= "email = :value";
-                    break;
-                case 'tel':
-                    $sql .= "tel = :value";
-                    break;
-                case 'date_naissance':
-                    $sql .= "date_naissance = :value";
-                    break;
-                case 'genre':
-                    $sql .= "genre = :value";
-                    break;
-                case 'taille':
-                    $sql .= "taille = :value";
-                    break;
-                case 'poids':
-                    $sql .= "poids = :value";
-                    break;
-                case 'club':
-                    $sql .= "club = :value";
-                    break;
-                case 'niveau_championnat':
-                    $sql .= "niveau_championnat = :value";
-                    break;
-                case 'poste':
-                    $sql .= "poste = :value";
-                    break;
-                case 'objectifs':
-                    $sql .= "objectifs = :value";
-                    break;
-                default:
-                    return '<div class="error">Champ non géré.</div>';
-            }
-            $sql .= " WHERE id = :id";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':value', $value);
-            $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            return '<div class="success">Mise à jour réussie.</div>';
-        } catch (PDOException $e) {
-            return '<div class="error">Échec de la mise à jour : ' . $e->getMessage() . '</div>';
-        }
-    }
-}
-
-
-   
     
-
-   
+}
+  
 
 // Styles CSS
 echo "
