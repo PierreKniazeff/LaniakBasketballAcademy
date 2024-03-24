@@ -64,13 +64,15 @@ class LoginController
                         $user['token'],
                     );
 
-                    // Stocker les informations utilisateur dans la session
-                    $_SESSION['user'] = $user;
+                   // Stocker les informations utilisateur dans la session
+                   $_SESSION['user'] = $user;
 
-                    // Stockage de l'ID utilisateur dans la session
-                    $_SESSION['id'] = $user->getId();
+                   // Stocker l'email de l'utilisateur dans la session
+                   $_SESSION['email'] = $user->getEmail();
+
 
                     // Afficher les informations de l'utilisateur directement
+                    // header('Location: ../controllers/utilisateur.view.php');
                     include_once(__DIR__ . '/../views/utilisateur.view.php');
                     exit;
                 } else {
@@ -86,6 +88,8 @@ class LoginController
             die("Erreur de requête : " . $e->getMessage());
         }
     }
+
+    
     public function updateUserField($userEmail, $field, $value)
 {
     // Vérifier si le champ est autorisé
@@ -119,8 +123,8 @@ class LoginController
 $loginController = new LoginController();
 
 // Définir les messages par défaut
-$successMessage = "";
-$errorMessage = "";
+$successMessage = "OUI";
+$errorMessage = "NON";
 
 // Vérification si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

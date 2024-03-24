@@ -128,6 +128,17 @@ class MainController
         $this->genererPage($data_page);
     }
 
+    public function profile()
+    {
+        $data_page = [
+            "page_title" => "Profile",
+            "page_description" => "Description de la page profil",
+            "view" => "./controllers/profile.php",
+            "template" => "views/common/template.php"
+        ];
+        $this->genererPage($data_page);
+    }
+
     public function utilisateur()
     {
         $data_page = [
