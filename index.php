@@ -45,9 +45,6 @@ try {
         case 'utilisateur':
             $mc->utilisateur();
             break;
-            case 'profile':
-                $mc->profile();
-                break;
 
         default:
             throw new Exception("<h2>La page n'existe pas</h2>");
