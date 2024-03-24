@@ -78,85 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Espace Membre</title>
-</head>
 
-<body>
-    <div class="container">
-        <h2 class="mb-4">Vos informations personnelles</h2>
-
-        <div class="form-group">
-            <label for="prenom" class="form-label">Prénom:</label>
-            <input type="text" id="prenom" name="prenom" value="<?= htmlspecialchars($user->getPrenom()) ?>" readonly>
-            <button class="edit-btn" data-field="prenom"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="nom" class="form-label">Nom : </label>
-            <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($user->getNom()) ?>" readonly>
-            <button class="edit-btn" data-field="nom"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="email" class="form-label">Email : </label>
-            <input type="text" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" readonly>
-            <button class="edit-btn" data-field="email"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="tel" class="form-label">Téléphone : </label>
-            <input type="text" id="tel" name="tel" value="<?= htmlspecialchars($user->getTel()) ?>" readonly>
-            <button class="edit-btn" data-field="tel"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="date_naissance" class="form-label">Date de naissance : </label>
-            <input type="text" id="date_naissance" name="date_naissance" value="<?= htmlspecialchars($user->getDateNaissance()) ?>" readonly>
-            <button class="edit-btn" data-field="date_naissance"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="genre" class="form-label">Genre : </label>
-            <input type="text" id="genre" name="genre" value="<?= htmlspecialchars($user->getGenre()) ?>" readonly>
-            <button class="edit-btn" data-field="genre"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="taille" class="form-label">Taille : </label>
-            <input type="text" id="taille" name="taille" value="<?= htmlspecialchars($user->getTaille()) ?>" readonly>
-            <button class="edit-btn" data-field="taille"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="poids" class="form-label">Poids : </label>
-            <input type="text" id="poids" name="poids" value="<?= htmlspecialchars($user->getPoids()) ?>" readonly>
-            <button class="edit-btn" data-field="poids"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="club" class="form-label">Club : </label>
-            <input type="text" id="club" name="club" value="<?= htmlspecialchars($user->getClub()) ?>" readonly>
-            <button class="edit-btn" data-field="club"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="niveau_championnat" class="form-label">Niveau de championnat : </label>
-            <input type="text" id="niveau_championnat" name="niveau_championnat" value="<?= htmlspecialchars($user->getNiveauChampionnat()) ?>" readonly>
-            <button class="edit-btn" data-field="niveau_championnat"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="poste" class="form-label">Poste : </label>
-            <input type="text" id="poste" name="poste" value="<?= htmlspecialchars($user->getPoste()) ?>" readonly>
-            <button class="edit-btn" data-field="poste"><i class="fas fa-pen"></i></button>
-        </div>
-
-        <div class="form-group">
-            <label for="objectifs" class="form-label">Objectifs : </label>
-            <input type="text" id="objectifs" name="objectifs" value="<?= htmlspecialchars($user->getObjectifs()) ?>" readonly>
-            <button class="edit-btn" data-field="objectifs"><i class="fas fa-pen"></i></button>
-        </div>
-
-    </div>
 
     <style>
         /* Styles existants */
@@ -229,6 +151,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
             cursor: not-allowed;
         }
     </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mb-4">Vos informations personnelles</h2>
+
+        <form method="post" action="">
+
+            <div class="form-group">
+                <label for="prenom" class="form-label">Prénom:</label>
+                <input type="text" id="prenom" name="prenom" value="<?= htmlspecialchars($user->getPrenom()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="nom" class="form-label">Nom:</label>
+                <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($user->getNom()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="tel" class="form-label">Téléphone:</label>
+                <input type="text" id="tel" name="tel" value="<?= htmlspecialchars($user->getTel()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="date_naissance" class="form-label">Date de Naissance:</label>
+                <input type="date" id="date_naissance" name="date_naissance" value="<?= htmlspecialchars($user->getDateNaissance()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="genre" class="form-label">Genre:</label>
+                <select id="genre" name="genre" class="form-control">
+                    <option value="masculin" <?= ($user->getGenre() == 'masculin') ? 'selected' : '' ?>>Masculin</option>
+                    <option value="féminin" <?= ($user->getGenre() == 'féminin') ? 'selected' : '' ?>>Féminin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="taille" class="form-label">Taille:</label>
+                <input type="number" id="taille" name="taille" value="<?= htmlspecialchars($user->getTaille()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="poids" class="form-label">Poids:</label>
+                <input type="number" id="poids" name="poids" value="<?= htmlspecialchars($user->getPoids()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="club" class="form-label">Club:</label>
+                <input type="text" id="club" name="club" value="<?= htmlspecialchars($user->getClub()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="niveau_championnat" class="form-label">Niveau de Championnat:</label>
+                <input type="text" id="niveau_championnat" name="niveau_championnat" value="<?= htmlspecialchars($user->getNiveauChampionnat()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="poste" class="form-label">Poste:</label>
+                <input type="text" id="poste" name="poste" value="<?= htmlspecialchars($user->getPoste()) ?>" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="objectifs" class="form-label">Objectifs:</label>
+                <textarea id="objectifs" name="objectifs" class="form-control"><?= htmlspecialchars($user->getObjectifs()) ?></textarea>
+            </div>
+
+            <button type="submit" name="saveButton" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
 
     <script>
         document.querySelectorAll('.edit-btn').forEach(button => {
@@ -276,6 +272,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
         });
     </script>
 </body>
+
+</html>
 
 </html>
 
