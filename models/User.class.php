@@ -1,5 +1,7 @@
 <?php
-class User {
+class User
+{
+    private $id;
     private $prenom;
     private $nom;
     private $email;
@@ -16,11 +18,12 @@ class User {
     private $created_at;
     private $confirmed;
     private $token;
-    private $id;
 
-    
 
-    public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, $password, $created_at = null, $confirmed = 0, $token = null) {
+
+
+    public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, $password, $created_at = null, $confirmed = 0, $token = null)
+    {
         $this->prenom = $prenom;
         $this->nom = $nom;
         $this->email = $email;
@@ -37,77 +40,193 @@ class User {
         $this->created_at = $created_at;
         $this->confirmed = $confirmed;
         $this->token = $token;
-        
-        
     }
 
     // Fonctions Getter pour accéder aux valeurs des champs
-    public function getPrenom() {
+    public function getPrenom()
+    {
         return $this->prenom;
     }
 
-    public function getNom() {
+    public function getNom()
+    {
         return $this->nom;
     }
 
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function getTel() {
+    public function getTel()
+    {
         return $this->tel;
     }
-    public function getDateNaissance() {
+    public function getDateNaissance()
+    {
         return $this->date_naissance;
     }
-    public function getGenre() {
+    public function getGenre()
+    {
         return $this->genre;
     }
 
-    public function getTaille() {
+    public function getTaille()
+    {
         return $this->taille;
     }
 
-    public function getPoids() {
+    public function getPoids()
+    {
         return $this->poids;
     }
 
-    public function getClub() {
+    public function getClub()
+    {
         return $this->club;
     }
 
-    public function getNiveauChampionnat() {
+    public function getNiveauChampionnat()
+    {
         return $this->niveau_championnat;
     }
 
-    public function getPoste() {
+    public function getPoste()
+    {
         return $this->poste;
     }
 
-    public function getObjectifs() {
+    public function getObjectifs()
+    {
         return $this->objectifs;
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
 
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->created_at;
     }
-    public function getConfirmed() {
+    public function getConfirmed()
+    {
         return $this->confirmed;
     }
-    public function setToken($token) {
+    public function setToken($token)
+    {
         $this->token = $token;
     }
-    
-    public function getToken() {
+
+    public function getToken()
+    {
         return $this->token;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
-}
 
+
+    // Méthodes Setter pour mettre à jour les propriétés de l'utilisateur
+
+    public function setPrenom($prenom)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->prenom = $prenom;
+    }
+
+    public function setNom($nom)
+    {
+        // Gestion des erreurs
+        if (!empty($nom)) {
+            $this->nom = $nom;
+        } else {
+            throw new Exception("Le nom ne peut pas être vide");
+        }
+    }
+
+    public function setEmail($email)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->email = $email;
+    }
+
+    public function setTel($tel)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->tel = $tel;
+    }
+
+    public function setDateNaissance($date_naissance)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->date_naissance = $date_naissance;
+    }
+
+    public function setGenre($genre)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->genre = $genre;
+    }
+
+    public function setTaille($taille)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->taille = $taille;
+    }
+
+    public function setPoids($poids)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->poids = $poids;
+    }
+
+    public function setClub($club)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->club = $club;
+    }
+
+    public function setNiveauChampionnat($niveau_championnat)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->niveau_championnat = $niveau_championnat;
+    }
+
+    public function setPoste($poste)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->poste = $poste;
+    }
+
+    public function setObjectifs($objectifs)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->objectifs = $objectifs;
+    }
+
+    public function setPassword($password)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->password = $password;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->created_at = $created_at;
+    }
+
+    public function setConfirmed($confirmed)
+    {
+        // Ajouter une validation ici si nécessaire
+        $this->confirmed = $confirmed;
+    }
+
+    // Ajoutez d'autres méthodes setter au besoin...
+
+
+}
