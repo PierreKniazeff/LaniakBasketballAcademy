@@ -6,7 +6,7 @@ class db
 
     public function connect()
     {
-        $config = require 'config/database.php';
+        $config = $config = require_once 'config/database.php';
         $dsn = "mysql:host={$config['host']};dbname={$config['database']}";
         try {
             $this->pdo = new PDO($dsn, $config['user'], $config['password']);

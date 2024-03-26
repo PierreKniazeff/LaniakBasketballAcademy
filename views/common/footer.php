@@ -11,7 +11,7 @@
             <li class="nav-item"><a class="nav-link" href="https://www.tiktok.com/@laniakworkout"><img src="<?= BASE_URL ?>public/assets/images/tiktok.PNG" alt="Tiktok"></a></li>
             <li class="nav-item"><a class="nav-link" href="https://www.youtube.com/watch?v=hpxM3jMlIVs"><img src="<?= BASE_URL ?>public/assets/images/youtube.PNG" alt="Youtube"></a></li>
             <li class="nav-item"><a class="nav-link" href="https://www.facebook.com/Laniak"><img src="<?= BASE_URL ?>public/assets/images/facebook.PNG" alt="Facebook"></a></li>
-            <li class="nav-item"><a class="nav-link" href="https://www.snapchat.com/add/laniak95?share_id=B30dGYh7NA0&locale=fr-FR"><img src="<?= BASE_URL ?>public/assets/images/snapchat.PNG" alt="Snapchat"></a></li>
+            <!-- <li class="nav-item"><a class="nav-link" href="https://www.snapchat.com/add/laniak95?share_id=B30dGYh7NA0&locale=fr-FR"><img src="<?= BASE_URL ?>public/assets/images/snapchat.PNG" alt="Snapchat"></a></li> -->
         </ul>
         <style>
             .nav-link img {

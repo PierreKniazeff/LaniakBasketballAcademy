@@ -1,23 +1,42 @@
 <?php
 $page_title = 'utilisateur'; // Définition de la variable pour menu.php
 require_once(__DIR__ . '/../views/common/menu.php');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 ?>
 
 <?php
 require_once(__DIR__ . '/../views/common/header.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+    if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in']) {
+        // Désérialisation de l'objet User
+        $user = unserialize($_SESSION['user']);
+        // Ici, vous pouvez utiliser $user comme un objet de la classe User
+        echo "Bienvenue, " . htmlspecialchars($user->getPrenom());
+        // Affichez d'autres détails comme désiré
+
+        // Par exemple, si vous avez besoin de lire le nom :
+        echo "Nom : " . htmlspecialchars($user->getNom());
+    } else {
+        // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion.
+        header('Location: https://levelnext.fr/views/connexion.view.php');
+        exit;
+    }
 }
 require_once(__DIR__ . '/../models/User.class.php');
 
 
 // Vérifiez si l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
-    header('Location: ../controllers/login.php');
+    header('Location: https://levelnext.fr/controllers/login.php');
     exit;
 }
 
-$user = $_SESSION['user'];
+// Récupérer les informations de l'utilisateur de la session
+$user = unserialize($_SESSION['user']);
+// $user = $_SESSION['user'];
 
 // Traitement du formulaire lorsque celui-ci est soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
@@ -38,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     // Vérifiez si l'utilisateur est connecté via son email
     if (!isset($_SESSION['user_email'])) {
         // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
-        header('Location: ../controllers/login.php');
+        header('Location: https://levelnext.fr/controllers/login.php');
         exit;
     }
 

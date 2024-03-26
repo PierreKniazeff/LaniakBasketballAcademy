@@ -1,6 +1,6 @@
 <?php
 // Charger la configuration de la base de données
-$config = require 'config/database.php';
+$config = $config = require_once 'config/database.php';
 
 // Créer une instance de la classe PDO pour la connexion à la base de données
 $pdo = new PDO("mysql:dbname={$config['database']};host={$config['host']}", $config['user'], $config['password']);
