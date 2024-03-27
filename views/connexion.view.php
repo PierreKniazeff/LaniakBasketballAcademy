@@ -51,7 +51,7 @@ $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Identifiants inc
             <input type="password" id="password" name="password" class="form-control border-dark" required>
         </div>
         <button type="submit" class="btn btn-primary">Se connecter</button>
-        <a href="password_recovery.php" class="btn btn-secondary">Mot de passe oublié</a>
+        <a href="https://levelnext.fr/views/password_recovery.view.php" class="btn btn-secondary">Mot de passe oublié</a>
     </form>
 </div>
 

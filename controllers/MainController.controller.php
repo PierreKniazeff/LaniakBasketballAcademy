@@ -134,7 +134,29 @@ class MainController
         $data_page = [
             "page_title" => "Utilisateur",
             "page_description" => "Description de la page utilisateur",
-            "view" => "./views/utilisateur.views.php",
+            "view" => "./views/utilisateur.view.php",
+            "template" => "views/common/template.php"
+        ];
+        $this->genererPage($data_page);
+    }
+
+    public function password_recovery()
+    {
+        $data_page = [
+            "page_title" => "password_recovery",
+            "page_description" => "Description de la page password_recovery",
+            "view" => "./views/password_recovery.view.php",
+            "template" => "views/common/template.php"
+        ];
+        $this->genererPage($data_page);
+    }
+
+    public function password_modification()
+    {
+        $data_page = [
+            "page_title" => "password_modification",
+            "page_description" => "Description de la page password_modification",
+            "view" => "./views/password_modification.view.php",
             "template" => "views/common/template.php"
         ];
         $this->genererPage($data_page);

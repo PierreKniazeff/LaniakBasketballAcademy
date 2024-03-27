@@ -45,6 +45,12 @@ try {
         case 'utilisateur':
             $mc->utilisateur();
             break;
+        case 'password_recovery':
+            $mc->password_recovery();
+            break;
+        case 'password_modification':
+            $mc->password_modification();
+            break;
 
         default:
             throw new Exception("<h2>La page n'existe pas</h2>");
