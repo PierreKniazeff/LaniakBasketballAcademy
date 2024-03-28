@@ -82,31 +82,34 @@ class PasswordRecoveryController
         return null;
     }
 
-    public function demandeMotDePasseOublie($email)
-    {
+    public function demandeMotDePasseOublie($email) {
         try {
             // Vérifier si l'email existe dans la base de données
             $stmt = $this->pdo->prepare("SELECT * FROM inscription WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
             if ($user) {
-                // Générer un jeton pour la réinitialisation du mot de passe
-                $token = bin2hex(random_bytes(32));
-
-                // Définir la date d'expiration du token (par exemple, une heure plus tard)
-                $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
-
-                // Mettre à jour le jeton et sa date d'expiration dans la base de données pour cet utilisateur
-                $stmt = $this->pdo->prepare("UPDATE inscription SET token = :token, token_expiration = :expiration WHERE email = :email");
-                $stmt->execute(['token' => $token, 'expiration' => $expiration, 'email' => $email]);
-
-                // Envoyer un email de réinitialisation avec le lien contenant le jeton
+                // Utiliser le token existant s'il y en a un pour cet utilisateur
+                $resetToken = $user['reset_mdp_token'];
+                
+                // Si aucun token n'existe pour cet utilisateur, en générer un nouveau
+                if (empty($resetToken)) {
+                    $resetToken = bin2hex(random_bytes(32));
+                    $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
+    
+                    // Mettre à jour le jeton et sa date d'expiration dans la base de données pour cet utilisateur
+                    $stmt = $this->pdo->prepare("UPDATE inscription SET reset_mdp_token = :reset_token, token_expiration = :expiration WHERE email = :email");
+                    $stmt->execute(['reset_token' => $resetToken, 'expiration' => $expiration, 'email' => $email]);
+                }
+    
+                // Envoyer un email de réinitialisation avec le bon token
+                $user = ['email' => $email, 'reset_token' => $resetToken];
                 $this->sendPasswordResetEmail($user);
-
-                // Redirection vers la page de modification de mot de passe avec un message de succès
+    
+                // Redirection vers la page de modification de mot de passe avec un message de succès et le token
                 $_SESSION['success_message'] = 'Demande de réinitialisation envoyée avec succès. Veuillez vérifier votre email.';
-                echo "<script>window.location.href = 'https://levelnext.fr/views/password_modification.view.php?success=1&token=" . urlencode($token) . "';</script>";
+                echo "<script>window.location.href = 'https://levelnext.fr/views/password_recovery.view.php?success=1';</script>";
                 exit();
             } else {
                 // Redirection vers la page de récupération de mot de passe avec un message d'erreur
@@ -119,12 +122,12 @@ class PasswordRecoveryController
             die("Erreur de base de données : " . $e->getMessage());
         }
     }
-
+    
     public function resetPassword($token, $newPassword, $confirmPassword)
     {
         try {
             // Vérifier si le token existe dans la base de données
-            $stmt = $this->pdo->prepare("SELECT * FROM inscription WHERE token = :token");
+            $stmt = $this->pdo->prepare("SELECT * FROM inscription WHERE reset_mdp_token = :token");
             $stmt->execute(['token' => $token]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -135,7 +138,7 @@ class PasswordRecoveryController
                     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
                     // Mettre à jour le mot de passe dans la base de données
-                    $stmt = $this->pdo->prepare("UPDATE inscription SET password = :password, token = NULL WHERE token = :token");
+                    $stmt = $this->pdo->prepare("UPDATE inscription SET password = :password, reset_mdp_token = NULL WHERE reset_mdp_token = :token");
                     $stmt->execute(['password' => $hashedPassword, 'token' => $token]);
 
                     // Redirection vers la page de connexion avec un message de succès
@@ -162,6 +165,14 @@ class PasswordRecoveryController
 
     public function sendPasswordResetEmail($user)
     {
+        // Récupérer les données de l'utilisateur depuis le tableau
+        $email = $user['email'];
+        $prenom = $user['prenom'];
+        $resetToken = $user['reset_token']; // Récupérer le token du tableau utilisateur
+    
+        // Utilisez le nouveau token passé en argument pour construire le lien de réinitialisation du mot de passe
+        $resetLink = 'https://levelnext.fr/views/password_modification.view.php?token=' . urlencode($resetToken);
+    
         $mail = new PHPMailer(true); // Activer les exceptions
         $mail->CharSet = 'UTF-8'; // Définir le jeu de caractères à UTF-8
         try {
@@ -173,18 +184,18 @@ class PasswordRecoveryController
             $mail->Password = $_ENV['SMTP_PASS']; // Mot de passe de votre adresse email
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Cryptage TLS
             $mail->Port = $_ENV['SMTP_PORT']; // Port SMTP
-
+    
             // Paramètres d'expéditeur et destinataire
             $mail->setFrom('kniazeff.pierre@hotmail.fr', 'Laniak Basketball Academy');
-            $mail->addAddress($user['email'], $user['prenom']); // Envoyer l'email à l'adresse de l'utilisateur
-
+            $mail->addAddress($email, $prenom); // Envoyer l'email à l'adresse de l'utilisateur
+    
             // Contenu de l'email
             $mail->isHTML(true); // Définir le format de l'email à HTML
             $mail->Subject = 'Réinitialisation de votre mot de passe';
             $mail->Body = "<p>Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :</p>
-            <p><a href='https://levelnext.fr/views/password_modification.view.php?token={$user['token']}'>Réinitialiser le mot de passe</a></p>
+            <p><a href='{$resetLink}'>Réinitialiser le mot de passe</a></p>
             <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>";
-
+    
             $mail->send();
         } catch (Exception $e) {
             // Gérer les erreurs d'envoi d'email de manière appropriée

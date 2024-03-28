@@ -18,11 +18,10 @@ class User
     private $created_at;
     private $confirmed;
     private $token;
+    private $reset_mdp_token; // Nouvelle variable pour le jeton de réinitialisation du mot de passe
 
-
-
-
-    public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, $password, $created_at = null, $confirmed = 0, $token = null)
+    public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, 
+    $password, $created_at = null, $confirmed = 0, $token = null, $reset_mdp_token = null) // Ajoutez $reset_mdp_token à votre constructeur
     {
         $this->prenom = $prenom;
         $this->nom = $nom;
@@ -40,6 +39,7 @@ class User
         $this->created_at = $created_at;
         $this->confirmed = $confirmed;
         $this->token = $token;
+        $this->reset_mdp_token = $reset_mdp_token; 
     }
 
     // Fonctions Getter pour accéder aux valeurs des champs
@@ -129,7 +129,10 @@ class User
         return $this->id;
     }
 
-
+    public function getResetMdpToken()
+    {
+        return $this->reset_mdp_token;
+    }
     // Méthodes Setter pour mettre à jour les propriétés de l'utilisateur
 
     public function setPrenom($prenom)
@@ -224,6 +227,10 @@ class User
     {
         // Ajouter une validation ici si nécessaire
         $this->confirmed = $confirmed;
+    }
+    public function setResetMdpToken($reset_mdp_token)
+    {
+        $this->reset_mdp_token = $reset_mdp_token;
     }
 
     // Ajoutez d'autres méthodes setter au besoin...

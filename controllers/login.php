@@ -69,19 +69,20 @@ class LoginController
                     $_SESSION['email'] = $user->getEmail();  // Stocker l'email de l'utilisateur dans la session
 
                     // Redirection vers la page utilisateur.view.php
-                    header('Location: https://levelnext.fr/views/utilisateur.view.php');
-                    // include_once(__DIR__ . '/../views/utilisateur.view.php');
+                    echo "<script>window.location.href = 'https://levelnext.fr/views/utilisateur.view.php';</script>";
                     exit();
+                    // include_once(__DIR__ . '/../views/utilisateur.view.php');
+                  
                 } else {
                     return "Identifiants incorrects. Veuillez réessayer.";
                 }
             } else {
                 return "Identifiants incorrects. Veuillez réessayer.";
             }
-        }  catch (PDOException $e) {
+        } catch (PDOException $e) {
             // Log the error for debugging purposes
             error_log("Erreur de requête : " . $e->getMessage());
-        
+
             // Afficher un message d'erreur générique à l'utilisateur
             die("Une erreur s'est produite. Veuillez réessayer ultérieurement.");
         }

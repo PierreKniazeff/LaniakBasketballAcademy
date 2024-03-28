@@ -21,7 +21,7 @@ if (session_status() == PHP_SESSION_NONE) {
         echo "Nom : " . htmlspecialchars($user->getNom());
     } else {
         // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion.
-        header('Location: https://levelnext.fr/views/connexion.view.php');
+        echo "<script>window.location.href = 'https://levelnext.fr/views/connexion.view.php';</script>";
         exit;
     }
 }
@@ -30,7 +30,7 @@ require_once(__DIR__ . '/../models/User.class.php');
 
 // Vérifiez si l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
-    header('Location: https://levelnext.fr/controllers/login.php');
+    echo "<script>window.location.href = 'https://levelnext.fr/controllers/login.php';</script>";
     exit;
 }
 
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     // Vérifiez si l'utilisateur est connecté via son email
     if (!isset($_SESSION['user_email'])) {
         // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
-        header('Location: https://levelnext.fr/controllers/login.php');
+        echo "<script>window.location.href = 'https://levelnext.fr/controllers/login.php';</script>";
         exit;
     }
 

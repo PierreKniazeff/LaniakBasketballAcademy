@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($action) {
         case 'reset_password':
             // Réinitialisation du mot de passe
-            $token = $_POST['token'];
+            $reset_mdp_token = $_POST['token'];
             $newPassword = $_POST['new_password'];
             $confirmPassword = $_POST['confirm_password'];
-            $controller->resetPassword($token, $newPassword, $confirmPassword);
+            $controller->resetPassword($reset_mdp_token, $newPassword, $confirmPassword);
             break;
         default:
             // Action non reconnue

@@ -34,7 +34,6 @@ if (file_exists($envFilePath)) {
     die('.env file not found.');
 }
 
-
 require_once(__DIR__ . '/../config/database.php');
 require_once(__DIR__ . '/../models/User.class.php');
 require(__DIR__ . '/../vendor/autoload.php');
