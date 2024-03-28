@@ -96,7 +96,7 @@ class PasswordRecoveryController
                 // Si aucun token n'existe pour cet utilisateur, en générer un nouveau
                 if (empty($resetToken)) {
                     $resetToken = bin2hex(random_bytes(32));
-                    $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                    $expiration = date('Y-m-d H:i:s', strtotime('+3 minutes'));
     
                     // Mettre à jour le jeton et sa date d'expiration dans la base de données pour cet utilisateur
                     $stmt = $this->pdo->prepare("UPDATE inscription SET reset_mdp_token = :reset_token, token_expiration = :expiration WHERE email = :email");
