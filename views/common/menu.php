@@ -21,7 +21,7 @@
                         <a class="nav-link" href="welcome">Welcome</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Accueil') echo 'active'; ?>">
-                        <a class="nav-link" href="accueil">Accueil</a>
+                        <a class="nav-link" href="accueil">Laniak</a>
                     </li>
                     <!-- Ajoutez ici les autres éléments de la barre de navigation -->
                     <li class="nav-item <?php if ($page_title === 'A propos') echo 'active'; ?>">
@@ -34,7 +34,7 @@
                         <a class="nav-link" href="page3">Evénements et actualités</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Galerie') echo 'active'; ?>">
-                        <a class="nav-link" href="page4">Galerie</a>
+                        <a class="nav-link" href="page4">Galeries</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Contact') echo 'active'; ?>">
                         <a class="nav-link" href="contact">Contact</a>
