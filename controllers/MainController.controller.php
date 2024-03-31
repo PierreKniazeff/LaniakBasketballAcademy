@@ -18,6 +18,7 @@ class MainController
         require_once($template);
     }
 
+
     public function welcome()
     {
         $data_page = [

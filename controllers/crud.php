@@ -34,7 +34,7 @@ if (file_exists($envFilePath)) {
     die('.env file not found.');
 }
 
-require_once(__DIR__ . '/../config/database.php');
+
 require_once(__DIR__ . '/../models/User.class.php');
 require(__DIR__ . '/../vendor/autoload.php');
 
@@ -51,7 +51,7 @@ class CRUD
 
     public function __construct()
     {
-        $config = require('config/database.php');
+        $config = require_once(__DIR__ . '/../config/database.php');
         $this->pdo = new PDO(
             "mysql:host=" . $config['host'] . ";dbname=" . $config['database'],
             $config['user'],
@@ -70,7 +70,6 @@ class CRUD
         $count = $stmt->fetchColumn();
         return $count > 0;
     }
-
     public function createUser(User $user)
     {
         // Initialisation du tableau associatif pour le message de retour
@@ -149,8 +148,11 @@ class CRUD
             // Envoi de l'e-mail de confirmation
             $this->sendConfirmationEmail($user);
 
-            $result['message'] = "Inscription réussie. Un email de confirmation vous a été envoyé.";
-            $result['class'] = "success";
+            // Stockez l'e-mail de l'utilisateur dans la session
+            $_SESSION['user_email'] = $user->getEmail();
+
+            $result['message'] = "Attention: Inscription à finaliser via l'email de confirmation qui vous est envoyé.";
+            $result['class'] = "error";
             return $result;
         } catch (PDOException $e) {
             $result['message'] = "Une erreur s'est produite lors de l'inscription: " . $e->getMessage();
@@ -158,6 +160,7 @@ class CRUD
             return $result;
         }
     }
+
 
     public function sendVerificationEmail($user)
     {
@@ -185,7 +188,7 @@ class CRUD
             $mail->Subject = 'Confirmation d\'inscription';
             $mail->Body = "
                 <p>Merci de vous être inscrit ! Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant :</p>
-                <p><a href='http://levelnext.fr/confirmation?token={$user->getToken()}'>Confirmer l'inscription</a></p>";
+                <p><a href='http://levelnext.fr/views/confirmation.view.php?token={$user->getToken()}'>Confirmer l'inscription</a></p>";
 
             $mail->send();
 
@@ -200,6 +203,46 @@ class CRUD
         }
     }
 
+   
+    
+    public function confirmUserByToken($token) {
+        // Vérifiez si l'utilisateur est connecté en récupérant l'e-mail de la session
+        if (!isset($_SESSION['user_email'])) {
+            return array('success' => false, 'message' => 'Utilisateur non connecté.');
+        }
+
+        $email = $_SESSION['user_email'];
+
+        try {
+            // Vérifiez si le token existe dans la base de données pour l'utilisateur correspondant à l'e-mail
+            $stmt = $this->pdo->prepare("SELECT * FROM inscription WHERE token = :token AND email = :email");
+            $stmt->bindParam(':token', $token);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                // Vérifiez si le token n'a pas expiré
+                $currentDateTime = new DateTime();
+                $tokenExpiration = new DateTime($user['token_expiration']);
+                if ($currentDateTime < $tokenExpiration) {
+                    // Mettez à jour la colonne 'confirmed' dans la base de données pour marquer l'utilisateur comme confirmé
+                    $stmt = $this->pdo->prepare("UPDATE inscription SET confirmed = 1 WHERE token = :token AND email = :email");
+                    $stmt->bindParam(':token', $token);
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
+
+                    return array('success' => true);
+                } else {
+                    return array('success' => false, 'message' => 'Le lien de confirmation a expiré.');
+                }
+            } else {
+                return array('success' => false, 'message' => 'Token invalide ou ne correspond pas à l\'e-mail.');
+            }
+        } catch (PDOException $e) {
+            return array('success' => false, 'message' => 'Erreur lors de la confirmation de l\'utilisateur: ' . $e->getMessage());
+        }
+    }
     public function sendConfirmationEmail($user)
     {
         $mail = new PHPMailer(true); // Activer les exceptions
@@ -241,7 +284,7 @@ class CRUD
                 <p>Merci.</p>";
 
             $mail->send();
-            echo 'Votre profil joueur a bien été soumis à LaniakBasketballAcademy';
+            echo '';
         } catch (Exception $e) {
             echo 'Votre profil joueur n\'a pas pu être envoyé à LaniakBasketballAcademy. Erreur : ', $mail->ErrorInfo;
         }
