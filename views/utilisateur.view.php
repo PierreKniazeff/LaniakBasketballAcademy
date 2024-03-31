@@ -241,7 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
                 <textarea id="objectifs" name="objectifs" class="form-control"><?= htmlspecialchars($user->getObjectifs()) ?></textarea>
             </div>
 
-            <button type="submit" name="saveButton" class="btn btn-primary">Enregistrer</button>
+            <button type="submit" name="saveButton" class="btn btn-primary">Modifier</button>
         </form>
     </div>
 

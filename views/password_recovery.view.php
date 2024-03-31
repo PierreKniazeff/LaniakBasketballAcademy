@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="container">
-        <h2 class="mb-4">Demande de réinitialisation de votre mot de passe</h2>
+    <br><br><h2 class="mb-4">Demande de réinitialisation de votre mot de passe</h2>
         
         <!-- Afficher les messages de succès et d'erreur -->
         <?php $successMessage = $controller->getSuccessMessage(); ?>

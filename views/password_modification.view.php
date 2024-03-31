@@ -1,6 +1,5 @@
 <?php
 $page_title = 'password_modification'; // Définition de la variable pour menu.php
-// require_once(__DIR__ . '/../views/common/header.php');
 require_once(__DIR__ . '/../views/common/menu.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -21,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($action) {
         case 'reset_password':
             // Réinitialisation du mot de passe
-            $reset_mdp_token = $_POST['token'];
+            $resetToken = $_POST['token'];
             $newPassword = $_POST['new_password'];
             $confirmPassword = $_POST['confirm_password'];
-            $controller->resetPassword($reset_mdp_token, $newPassword, $confirmPassword);
+            $controller->resetPassword($resetToken, $newPassword, $confirmPassword);
             break;
         default:
             // Action non reconnue
@@ -70,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="container">
-        <h2 class="mb-4">Modification de votre mot de passe</h2>
+        <br><br><h2 class="mb-4">Modification de votre mot de passe</h2>
 
         <!-- Afficher les messages de succès et d'erreur -->
         <?php $successMessage = $controller->getSuccessMessage(); ?>
@@ -152,4 +151,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
 require_once(__DIR__ . '/../views/common/footer.php');
 ?>
-
