@@ -71,96 +71,95 @@ class CRUD
         return $count > 0;
     }
     public function createUser(User $user)
-    {
-        // Initialisation du tableau associatif pour le message de retour
-        $result = array();
+{
+    // Initialisation du tableau associatif pour le message de retour
+    $result = array();
 
-        // Vérification de la validité de l'adresse email
-        if (!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
-            $result['message'] = "L'adresse email n'est pas valide.";
-            $result['class'] = "error";
-            return $result;
-        }
-
-        // Vérification si l'e-mail existe déjà
-        if ($this->emailExists($user->getEmail())) {
-            $result['message'] = "L'e-mail saisi est déjà utilisé. Veuillez en choisir un autre.";
-            $result['class'] = "error";
-            return $result;
-        }
-
-        // Insertion des données dans la base de données
-        try {
-            // Génération et stockage temporaire du jeton d'authentification
-            $token = bin2hex(random_bytes(16));
-            $user->setToken($token);
-
-            // Définir le token_expiration à 24 heures à partir de maintenant
-            $tokenExpiration = new DateTime(); // Heure actuelle
-            $tokenExpiration->add(new DateInterval('P1D')); // Ajoute 24 heures
-
-            $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel, date_naissance, genre, taille, poids, club, niveau_championnat, poste, objectifs, password, created_at, confirmed, token, token_expiration) VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, :taille, :poids, :club, :niveau_championnat, :poste, :objectifs, :password, NOW(), :confirmed, :token, :token_expiration)");
-
-            // En plus des autres paramètres déjà liés
-            $tokenExpirationFormatted = $tokenExpiration->format('Y-m-d H:i:s');
-            $stmt->bindParam(':token_expiration', $tokenExpirationFormatted);
-
-            // Hashing du mot de passe avant de l'insérer dans la base de données
-            $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
-
-            // Ici, vous devez définir les variables avant de les passer à bindParam()
-            $prenom = $user->getPrenom();
-            $nom = $user->getNom();
-            $email = $user->getEmail();
-            $tel = $user->getTel();
-            $date_naissance = $user->getDateNaissance();
-            $genre = $user->getGenre();
-            $taille = $user->getTaille();
-            $poids = $user->getPoids();
-            $club = $user->getClub();
-            $niveau_championnat = $user->getNiveauChampionnat();
-            $poste = $user->getPoste();
-            $objectifs = $user->getObjectifs();
-            $confirmed = 0; // Supposition que l'utilisateur n'est pas confirmé à l'inscription
-            $token = $user->getToken(); // Généré précédemment dans ce bloc
-
-            $stmt->bindParam(':prenom', $prenom);
-            $stmt->bindParam(':nom', $nom);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':tel', $tel);
-            $stmt->bindParam(':date_naissance', $date_naissance);
-            $stmt->bindParam(':genre', $genre);
-            $stmt->bindParam(':taille', $taille);
-            $stmt->bindParam(':poids', $poids);
-            $stmt->bindParam(':club', $club);
-            $stmt->bindParam(':niveau_championnat', $niveau_championnat);
-            $stmt->bindParam(':poste', $poste);
-            $stmt->bindParam(':objectifs', $objectifs);
-            $stmt->bindParam(':password', $hashedPassword); // Utilisation du mot de passe hashé
-            $stmt->bindParam(':confirmed', $confirmed);
-            $stmt->bindParam(':token', $token);
-
-            $stmt->execute();
-
-            // Envoi de l'e-mail de confirmation avec le lien de vérification
-            $this->sendVerificationEmail($user);
-
-            // Envoi de l'e-mail de confirmation
-            $this->sendConfirmationEmail($user);
-
-            // Stockez l'e-mail de l'utilisateur dans la session
-            $_SESSION['user_email'] = $user->getEmail();
-
-            $result['message'] = "Attention: Inscription à finaliser via l'email de confirmation qui vous est envoyé.";
-            $result['class'] = "error";
-            return $result;
-        } catch (PDOException $e) {
-            $result['message'] = "Une erreur s'est produite lors de l'inscription: " . $e->getMessage();
-            $result['class'] = "error";
-            return $result;
-        }
+    // Vérification de la validité de l'adresse email
+    if (!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+        $result['message'] = "L'adresse email n'est pas valide.";
+        $result['class'] = "error";
+        return $result;
     }
 
+    // Vérification si l'e-mail existe déjà
+    if ($this->emailExists($user->getEmail())) {
+        $result['message'] = "L'e-mail saisi est déjà utilisé. Veuillez en choisir un autre.";
+        $result['class'] = "error";
+        return $result;
+    }
+
+    // Insertion des données dans la base de données
+    try {
+        // Génération et stockage temporaire du jeton d'authentification
+        $token = bin2hex(random_bytes(16));
+        $user->setToken($token);
+
+        // Définir le token_expiration à 15 minutes à partir de maintenant
+        $tokenExpiration = new DateTime(); // Heure actuelle
+        $tokenExpiration->add(new DateInterval('PT15M')); // Ajoute 15 minutes
+
+        $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel, date_naissance, genre, taille, poids, club, niveau_championnat, poste, objectifs, password, created_at, confirmed, token, token_expiration) VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, :taille, :poids, :club, :niveau_championnat, :poste, :objectifs, :password, NOW(), :confirmed, :token, :token_expiration)");
+
+        // En plus des autres paramètres déjà liés
+        $tokenExpirationFormatted = $tokenExpiration->format('Y-m-d H:i:s');
+        $stmt->bindParam(':token_expiration', $tokenExpirationFormatted);
+
+        // Hashing du mot de passe avant de l'insérer dans la base de données
+        $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+
+        // Ici, vous devez définir les variables avant de les passer à bindParam()
+        $prenom = $user->getPrenom();
+        $nom = $user->getNom();
+        $email = $user->getEmail();
+        $tel = $user->getTel();
+        $date_naissance = $user->getDateNaissance();
+        $genre = $user->getGenre();
+        $taille = $user->getTaille();
+        $poids = $user->getPoids();
+        $club = $user->getClub();
+        $niveau_championnat = $user->getNiveauChampionnat();
+        $poste = $user->getPoste();
+        $objectifs = $user->getObjectifs();
+        $confirmed = 0; // Supposition que l'utilisateur n'est pas confirmé à l'inscription
+        $token = $user->getToken(); // Généré précédemment dans ce bloc
+
+        $stmt->bindParam(':prenom', $prenom);
+        $stmt->bindParam(':nom', $nom);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':tel', $tel);
+        $stmt->bindParam(':date_naissance', $date_naissance);
+        $stmt->bindParam(':genre', $genre);
+        $stmt->bindParam(':taille', $taille);
+        $stmt->bindParam(':poids', $poids);
+        $stmt->bindParam(':club', $club);
+        $stmt->bindParam(':niveau_championnat', $niveau_championnat);
+        $stmt->bindParam(':poste', $poste);
+        $stmt->bindParam(':objectifs', $objectifs);
+        $stmt->bindParam(':password', $hashedPassword); // Utilisation du mot de passe hashé
+        $stmt->bindParam(':confirmed', $confirmed);
+        $stmt->bindParam(':token', $token);
+
+        $stmt->execute();
+
+        // Envoi de l'e-mail de confirmation avec le lien de vérification
+        $this->sendVerificationEmail($user);
+
+        // Envoi de l'e-mail de confirmation
+        $this->sendConfirmationEmail($user);
+
+        // Stockez l'e-mail de l'utilisateur dans la session
+        $_SESSION['user_email'] = $user->getEmail();
+
+        $result['message'] = "Attention: Inscription à finaliser via l'email de confirmation qui vous est envoyé.";
+        $result['class'] = "error";
+        return $result;
+    } catch (PDOException $e) {
+        $result['message'] = "Une erreur s'est produite lors de l'inscription: " . $e->getMessage();
+        $result['class'] = "error";
+        return $result;
+    }
+}
 
     public function sendVerificationEmail($user)
     {
@@ -203,9 +202,10 @@ class CRUD
         }
     }
 
-   
-    
-    public function confirmUserByToken($token) {
+
+
+    public function confirmUserByToken($token)
+    {
         // Vérifiez si l'utilisateur est connecté en récupérant l'e-mail de la session
         if (!isset($_SESSION['user_email'])) {
             return array('success' => false, 'message' => 'Utilisateur non connecté.');
@@ -243,6 +243,38 @@ class CRUD
             return array('success' => false, 'message' => 'Erreur lors de la confirmation de l\'utilisateur: ' . $e->getMessage());
         }
     }
+
+    public function deleteExpiredUsers()
+    {
+        try {
+            // Calculer la date et l'heure actuelles
+            $currentDateTime = new DateTime();
+    
+            // Calculer la date et l'heure à laquelle les tokens expireront (15 minutes avant l'heure actuelle)
+            $tokenExpiration = clone $currentDateTime;
+            $tokenExpiration->sub(new DateInterval('PT15M')); // Soustraire 15 minutes
+    
+            // Supprimer les utilisateurs non confirmés dont le token a expiré
+            $stmt = $this->pdo->prepare("DELETE FROM inscription WHERE confirmed = 0 AND token_expiration < :tokenExpiration");
+            $formattedTokenExpiration = $tokenExpiration->format('Y-m-d H:i:s'); // Liaison du paramètre avec la valeur formatée
+            $stmt->bindParam(':tokenExpiration', $formattedTokenExpiration, PDO::PARAM_STR);
+             
+            $stmt->execute();
+    
+            $expiredUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            // Supprimer les profils des utilisateurs expirés
+            foreach ($expiredUsers as $user) {
+                $stmt = $this->pdo->prepare("DELETE FROM inscription WHERE id = :id");
+                $stmt->bindParam(':id', $user['id']);
+                $stmt->execute();
+            }
+        } catch (PDOException $e) {
+            // Gérer l'erreur si la suppression échoue
+            echo "Erreur lors de la suppression des utilisateurs expirés : " . $e->getMessage();
+        }
+    }
+    
     public function sendConfirmationEmail($user)
     {
         $mail = new PHPMailer(true); // Activer les exceptions
@@ -290,10 +322,10 @@ class CRUD
         }
     }
 
-     // Ajout d'une nouvelle méthode pour mettre à jour les informations de l'utilisateur
-    
+    // Ajout d'une nouvelle méthode pour mettre à jour les informations de l'utilisateur
+
 }
-  
+
 
 // Styles CSS
 echo "

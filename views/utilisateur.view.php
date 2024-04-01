@@ -4,10 +4,10 @@ require_once(__DIR__ . '/../views/common/menu.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-?>
 
-<?php
 require_once(__DIR__ . '/../views/common/header.php');
+require_once(__DIR__ . '/../models/User.class.php');
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
     if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in']) {
@@ -25,21 +25,25 @@ if (session_status() == PHP_SESSION_NONE) {
         exit;
     }
 }
-require_once(__DIR__ . '/../models/User.class.php');
 
-
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['user'])) {
-    echo "<script>window.location.href = 'https://levelnext.fr/controllers/login.php';</script>";
+// Récupérer les informations de l'utilisateur de la session
+if (isset($_SESSION['user'])) {
+    $user = unserialize($_SESSION['user']);
+} else {
+    echo "Erreur: Impossible de récupérer les informations de l'utilisateur de la session.";
     exit;
 }
 
-// Récupérer les informations de l'utilisateur de la session
-$user = unserialize($_SESSION['user']);
-// $user = $_SESSION['user'];
-
 // Traitement du formulaire lorsque celui-ci est soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
+    require_once(__DIR__ . '/../controllers/login.php');
+    // Vérifiez si l'utilisateur est connecté via son email
+    if (!isset($_SESSION['email'])) {
+        // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
+        echo "<script>window.location.href = 'https://levelnext.fr/controllers/login.php';</script>";
+        exit;
+    }
+
     // Récupérez les données du formulaire
     $prenom = $_POST['prenom'] ?? '';
     $nom = $_POST['nom'] ?? '';
@@ -54,15 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     $poste = $_POST['poste'] ?? '';
     $objectifs = $_POST['objectifs'] ?? '';
 
-    // Vérifiez si l'utilisateur est connecté via son email
-    if (!isset($_SESSION['user_email'])) {
-        // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
-        echo "<script>window.location.href = 'https://levelnext.fr/controllers/login.php';</script>";
-        exit;
-    }
-
     // Récupération de l'email de l'utilisateur dans la session
-    $email = $_SESSION['user_email'];
+    $email = $_SESSION['email'];
 
     // Effectuez la mise à jour des informations personnelles de l'utilisateur
     // Utilisez votre méthode updateUserField ou une autre méthode appropriée de votre classe CRUD/UserController
@@ -82,7 +79,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     $result .= $LoginController->updateUserField($email, 'objectifs', $objectifs);
 
     // Affichez les résultats de la mise à jour ou les messages de succès/erreur
-    echo $result; // Vous pouvez personnaliser cette sortie en fonction de la réponse de la méthode updateUserField
+    if ($result) {
+        $successMessage = "Les informations ont été mises à jour avec succès.";
+
+        // Si la mise à jour a réussi, récupérez à nouveau les données de l'utilisateur
+        $user = unserialize($_SESSION['user']);
+        // Mettez à jour les données de l'utilisateur avec les nouvelles données de la base de données
+        $user->setPrenom($prenom);
+        $user->setNom($nom);
+        $user->setTel($tel);
+        $user->setDateNaissance($date_naissance);
+        $user->setGenre($genre);
+        $user->setTaille($taille);
+        $user->setPoids($poids);
+        $user->setClub($club);
+        $user->setNiveauChampionnat($niveau_championnat);
+        $user->setPoste($poste);
+        $user->setObjectifs($objectifs);
+
+        // Stockez à nouveau l'objet utilisateur mis à jour dans la session
+        $_SESSION['user'] = serialize($user);
+    } else {
+        $errorMessage = "Une erreur s'est produite lors de la mise à jour des informations. Veuillez réessayer.";
+    }
 }
 ?>
 
@@ -242,57 +261,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
             </div>
 
             <button type="submit" name="saveButton" class="btn btn-primary">Modifier</button>
+            <?php if (isset($errorMessage)) : ?>
+                <div><?= $errorMessage ?></div>
+            <?php endif; ?>
+            <?php if (isset($successMessage)) : ?>
+                <div class="success"><?= $successMessage ?></div>
+            <?php endif; ?>
         </form>
     </div>
-
-    <script>
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                let inputField = this.previousElementSibling;
-                inputField.readOnly = false;
-                inputField.focus();
-                let originalValue = inputField.value;
-                let fieldName = this.getAttribute('data-field');
-
-                this.innerHTML = '<i class="fas fa-save"></i>';
-
-                this.onclick = function() {
-                    let value = inputField.value;
-
-                    fetch('../controllers/login.php', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                field: fieldName,
-                                value: value
-                            }),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                alert('Mise à jour réussie!');
-                                inputField.readOnly = true;
-                                this.innerHTML = '<i class="fas fa-pen"></i>';
-                                // Réinitialiser le bouton à l'icône d'édition
-                            } else {
-                                alert('Erreur lors de la mise à jour. Veuillez réessayer.');
-                                inputField.value = originalValue;
-                                // Restaurer la valeur précédente en cas d'erreur
-                            }
-                        })
-                        .catch(error => {
-                            alert('Une erreur s\'est produite : ' + error);
-                            inputField.value = originalValue;
-                            // Gérer les erreurs du serveur
-                        });
-                };
-            });
-        });
-    </script>
 </body>
-
-</html>
 
 </html>
 

@@ -12,9 +12,13 @@ class LoginController
 {
     private $pdo;
 
+
     public function __construct()
     {
         global $config;
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start(); // Démarrer la session ici si nécessaire
+        }
         try {
             $this->pdo = new PDO(
                 "mysql:host=" . $config['host'] . ";dbname=" . $config['database'],
@@ -27,7 +31,6 @@ class LoginController
             // Gérer les erreurs de connexion à la base de données de manière appropriée
             die("Erreur de connexion à la base de données : " . $e->getMessage());
         }
-        session_start(); // Démarrer la session ici si nécessaire
     }
 
 
@@ -68,11 +71,10 @@ class LoginController
                     $_SESSION['user_prenom'] = $user->getPrenom(); // Ajoutez cette ligne pour stocker le prénom
                     $_SESSION['email'] = $user->getEmail();  // Stocker l'email de l'utilisateur dans la session
 
+
                     // Redirection vers la page utilisateur.view.php
-                    echo "<script>window.location.href = 'https://levelnext.fr/views/utilisateur.view.php';</script>";
+                    header('Location: https://levelnext.fr/views/utilisateur.view.php');
                     exit();
-                    // include_once(__DIR__ . '/../views/utilisateur.view.php');
-                  
                 } else {
                     return "Identifiants incorrects. Veuillez réessayer.";
                 }
@@ -120,8 +122,8 @@ class LoginController
 $loginController = new LoginController();
 
 // Définir les messages par défaut
-$successMessage = "OUI";
-$errorMessage = "NON";
+$successMessage = "";
+$errorMessage = "";
 
 // Vérification si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -131,18 +133,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validation des données d'identification
     if ($email && $password) {
-        if ($loginController->loginUser($email, $password)) {
-            // L'utilisateur est authentifié
-            // Pas besoin de message de succès car les informations seront affichées sur cette même page
+        $loginResult = $loginController->loginUser($email, $password);
+        if ($loginResult === true) {
+            // L'utilisateur est authentifié avec succès
+            // Redirection vers la page utilisateur.view.php
+            header('Location: https://levelnext.fr/views/utilisateur.view.php');
+            exit();
         } else {
             // L'utilisateur n'est pas authentifié
             // Définir le message d'erreur
-            $errorMessage = "Identifiants incorrects. Veuillez réessayer.";
+            $errorMessage = $loginResult;
         }
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -173,10 +178,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <h1>Login</h1>
-    <!-- Afficher le message d'erreur -->
-    <?php if ($errorMessage) : ?>
-        <div class="error"><?= $errorMessage ?></div>
+    <?php if (!isset($_SESSION['user_logged_in'])) : ?>
+        <!-- Afficher le formulaire de connexion uniquement si l'utilisateur n'est pas déjà connecté -->
+        <h1>Login</h1>
+        <!-- Afficher le message d'erreur -->
+        <?php if (isset($errorMessage)) : ?>
+            <div class="error"><?= $errorMessage ?></div>
+        <?php endif; ?>
+
     <?php endif; ?>
 </body>
 

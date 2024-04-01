@@ -147,6 +147,27 @@
             background-color: #000000;
             color: #ffffff;
         }
+     /* Media queries si nécessaire */
+     @media (min-width: 992px) and (max-width: 1200px) {
+            /* Ajuster la taille du texte des nav items pour éviter les sauts de ligne */
+            .navbar-nav .nav-link {
+                font-size: 0.65em; /* Ajustez la taille du texte selon vos besoins */
+            }
+        }
+
+     @media (min-width: 1200px) and (max-width: 1400px) {
+            /* Ajuster la taille du texte des nav items pour éviter les sauts de ligne */
+            .navbar-nav .nav-link {
+                font-size: 0.9em; /* Ajustez la taille du texte selon vos besoins */
+            }
+        }
+
+        /* Styles pour les pages autres que welcome */
+        .welcome-page .navbar-nav .nav-item.active .nav-link {
+            /* Ajoutez ici les styles que vous souhaitez appliquer aux liens de navigation actifs sur les pages autres que welcome */
+            background-color: #000000;
+            color: #ffffff;
+        }
     </style>
 
 

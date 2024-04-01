@@ -18,6 +18,7 @@ class User
     private $created_at;
     private $confirmed;
     private $token;
+    private $token_expiration;
     private $reset_mdp_token; // Nouvelle variable pour le jeton de réinitialisation du mot de passe
 
     public function __construct($prenom, $nom, $email, $tel, $date_naissance, $genre, $taille, $poids, $club, $niveau_championnat, $poste, $objectifs, 
@@ -122,6 +123,11 @@ class User
     public function getToken()
     {
         return $this->token;
+    }
+
+    public function getTokenExpiration()
+    {
+        return $this->token_expiration;
     }
 
     public function getId()
@@ -231,6 +237,11 @@ class User
     public function setResetMdpToken($reset_mdp_token)
     {
         $this->reset_mdp_token = $reset_mdp_token;
+    }
+    public function setTokenExpiration($token_expiration)
+    {
+        // Vous pouvez ajouter une validation ici si nécessaire
+        $this->token_expiration = $token_expiration;
     }
 
     // Ajoutez d'autres méthodes setter au besoin...
