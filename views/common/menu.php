@@ -1,4 +1,4 @@
-<?php require_once("config.php"); ?>
+<?php require_once "config.php"; ?>
 
 <head>
     <meta charset="UTF-8">
@@ -40,6 +40,24 @@
                         <a class="nav-link" href="contact">Contact</a>
                     </li>
                 </ul>
+
+                <!-- Ajoutez ici les liens des pages à inclure dans le menu -->
+                <!-- <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="confirmation"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="utilisateur"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="password_recovery"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="password_modification"></a>
+                    </li> -->
+                    <!-- Ajoutez d'autres liens si nécessaire -->
+                </ul>
+
                 <div class="d-flex">
                     <img src="<?= BASE_URL ?>public/assets/images/USflag.PNG" alt="US Flag" width="30px" height="20px" style="margin-right: 10px;">
 

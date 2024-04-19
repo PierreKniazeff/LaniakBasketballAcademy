@@ -49,4 +49,3 @@ class Program {
         $this->endDate = $endDate;
     }
 }
-?>

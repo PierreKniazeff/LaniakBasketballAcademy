@@ -35,8 +35,8 @@ if (file_exists($envFilePath)) {
 }
 
 
-require_once(__DIR__ . '/../models/User.class.php');
-require(__DIR__ . '/../vendor/autoload.php');
+require_once __DIR__ . '/../models/User.class.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -51,7 +51,7 @@ class CRUD
 
     public function __construct()
     {
-        $config = require_once(__DIR__ . '/../config/database.php');
+        $config = require_once __DIR__ . '/../config/database.php';
         $this->pdo = new PDO(
             "mysql:host=" . $config['host'] . ";dbname=" . $config['database'],
             $config['user'],

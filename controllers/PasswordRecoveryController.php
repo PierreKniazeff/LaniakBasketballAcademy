@@ -35,9 +35,9 @@ if (file_exists($envFilePath)) {
 }
 
 // Inclure le fichier de configuration de la base de données
-$config = require_once(__DIR__ . '/../config/database.php');
-require_once(__DIR__ . '/../models/User.class.php');
-require(__DIR__ . '/../vendor/autoload.php');
+$config = require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/User.class.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 

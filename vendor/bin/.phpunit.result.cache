@@ -1,0 +1,1 @@
+{"version":1,"defects":{"CRUDTest::testEmailExists":4,"CRUDTest::testCreateUserSuccess":3},"times":{"CRUDTest::testEmailExists":7210.154,"CRUDTest::testCreateUserSuccess":0.135,"CRUDTest::testCreateUserFailure":0.006,"CRUDTest::testCreateUser":0.125}}

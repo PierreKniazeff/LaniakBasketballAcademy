@@ -55,9 +55,10 @@ if ($messageSent) {
 
     // Envoyer l'e-mail uniquement si les données sont valides
     if (!empty($nom) && filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($sujet) && !empty($message)) {
-        $to = "laniakbasketballacademy@gmail.com";
+        $to = "kniazeff.pierre@hotmail.fr";
+        // $to = "laniakbasketballacademy@gmail.com";
         $subject = "Nouveau Message de Contact Form Laniakbballacemy";
-        $headers = "From: contact@votre-site.com";
+        $headers = "From: laniakbasketballacademy@gmail.com";
 
         // Vérifier si l'e-mail est envoyé avec succès
         if (mail($to, $subject, $emailContent, $headers)) {
@@ -173,8 +174,9 @@ if ($messageSent) {
                     <input type="text" name="sujet" id="sujet" placeholder="Votre sujet ici">
                 </p>
                 <p>
-                    <label for="message"></label>
+                    <label for="message">
                     <textarea name="message" id="message" cols="30" rows="10" placeholder="Votre message ici"></textarea>
+                    </label>
                 </p>
                 <button type="submit" name="pierre">Envoyer</button>
             </form><br><br>
@@ -192,7 +194,7 @@ if ($messageSent) {
     </div>
 
     <footer>
-        <?php require_once("views/common/footer.php"); ?>
+        <?php require_once "views/common/footer.php"; ?>
     </footer>
 
 

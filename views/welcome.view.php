@@ -154,14 +154,14 @@
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg align-items-center border-bottom-0 welcome-page">
             <!-- Ajoutez ici le contenu de la barre de navigation -->
-            <?php require_once("views/common/menu.php") ?>
+            <?php require_once "views/common/menu.php" ?>
         </nav>
     </div>
 
     <!-- Ajoutez le footer ici -->
     <footer>
         <div class="container-fluid">
-            <?php include_once("views/common/footer.php"); ?>
+            <?php include_once "views/common/footer.php"; ?>
         </div>
     </footer>
 </body>

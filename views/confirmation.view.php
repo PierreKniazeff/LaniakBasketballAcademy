@@ -1,10 +1,10 @@
 <?php
 $page_title = 'confirmation'; // Définition de la variable pour menu.php
 header('Content-Type: text/html; charset=UTF-8');
-require_once(__DIR__ . '/../views/common/header.php');
-require_once(__DIR__ . '/../views/common/menu.php');
-require_once(__DIR__ . '/../models/User.class.php');
-require_once(__DIR__ . '/../controllers/crud.php');
+require_once __DIR__ . '/../views/common/header.php';
+require_once __DIR__ . '/../views/common/menu.php' ;
+require_once __DIR__ . '/../models/User.class.php';
+require_once __DIR__ . '/../controllers/crud.php';
 ?>
 
 <head>
@@ -46,4 +46,4 @@ if (isset($token) && !empty($token)) {
 }
 ?>
 </div>
-<?php require_once(__DIR__ . '/../views/common/footer.php'); ?>
+<?php require_once __DIR__ . '/../views/common/footer.php'; ?>

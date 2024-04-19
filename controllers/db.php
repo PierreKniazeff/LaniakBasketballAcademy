@@ -36,4 +36,4 @@ class db
         return $this->pdo;
     }
 }
-?>
+

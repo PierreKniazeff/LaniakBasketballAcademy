@@ -1,6 +1,7 @@
 <link href="public/css/.css" rel="stylesheet">
 
 <head>
+    <title>Laniak</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link href="public/css/.css" rel="stylesheet"> -->
@@ -13,7 +14,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <!-- Image du titre en haut à gauche -->
-                <br><br><img src="./public/assets/images/ModNiaTitle.PNG" class="img-fluid"
+                <br><br><img src="./public/assets/images/ModNiaTitle.PNG"  alt="" class="img-fluid"
                     style="max-width: 100%; max-height: 30vh;">
                 <!-- Texte du paragraphe sous le titre -->
                 <p class="roboto-font text-justify" style="max-width: 100%;"><br>Président et fondateur de Laniak
@@ -33,7 +34,7 @@
             </div>
             <div class="col-lg-6">
                 <!-- Image à droite du titre -->
-                <img src="./public/assets/images/PhotoAccueil.PNG" class="img-fluid" style="max-width: 100%;">
+                <img src="./public/assets/images/PhotoAccueil.PNG"  alt="" class="img-fluid" style="max-width: 100%;">
             </div>
         </div>
 
@@ -46,7 +47,7 @@
 
         <footer>
             <div class="container-fluid">
-                <?php include_once("views/common/footer.php"); ?>
+                <?php include_once "views/common/footer.php"; ?>
             </div>
         </footer>
 

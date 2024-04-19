@@ -1,4 +1,4 @@
-<?php require_once("config.php"); ?>
+<?php require_once "config.php"; ?>
 
 <head>
   <meta charset="utf-8">
@@ -15,7 +15,7 @@
 <body>
   <header class="d-flex flex-wrap justify-content-center py-3 mb-4 sticky-top">
     <div class="container-fluid custom-container">
-      <?php require_once("menu.php") ?> <!-- Inclure le contenu du fichier menu.php -->
+      <?php require_once "menu.php" ?> <!-- Inclure le contenu du fichier menu.php -->
     </div>
   </header>
 </body>

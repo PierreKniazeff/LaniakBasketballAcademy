@@ -1,6 +1,6 @@
 <?php
 // session_start(); // Démarre la session au tout début du script
-require_once(__DIR__ . '/../views/common/header.php');
+require_once __DIR__ . '/../views/common/header.php';
 
 // Définition des messages de succès et d'erreur
 $successMessage = isset($_GET['success']) && $_GET['success'] == 1 ? "Connexion réussie!" : "";
@@ -55,7 +55,7 @@ $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Identifiants inc
     </form>
 </div>
 
-<?php require_once(__DIR__ . '/../views/common/footer.php'); ?>
+<?php require_once __DIR__ . '/../views/common/footer.php'; ?>
 
 </body>
 </html>

@@ -1,7 +1,8 @@
-<?php require_once("config.php"); ?>
+<?php require_once "config.php"; ?>
 
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <title>Footer</title>
 </head>
 
 <div class="container-fluid">

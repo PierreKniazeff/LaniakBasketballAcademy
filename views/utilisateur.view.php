@@ -1,12 +1,12 @@
 <?php
 $page_title = 'utilisateur'; // Définition de la variable pour menu.php
-require_once(__DIR__ . '/../views/common/menu.php');
+require_once __DIR__ . '/../views/common/menu.php';
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once(__DIR__ . '/../views/common/header.php');
-require_once(__DIR__ . '/../models/User.class.php');
+require_once __DIR__ . '/../views/common/header.php';
+require_once __DIR__ . '/../models/User.class.php';
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -274,5 +274,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
 </html>
 
 <?php
-require_once(__DIR__ . '/../views/common/footer.php');
+require_once __DIR__ . '/../views/common/footer.php';
 ?>

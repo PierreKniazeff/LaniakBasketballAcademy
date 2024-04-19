@@ -5,8 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Inclure le fichier de configuration de la base de données
-$config = require_once(__DIR__ . '/../config/database.php');
-require_once(__DIR__ . '/../models/User.class.php');
+$config = require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/User.class.php';
 
 class LoginController
 {

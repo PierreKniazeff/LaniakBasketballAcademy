@@ -1,9 +1,9 @@
 <?php
 session_start(); // Démarre la session au tout début du script
 header('Content-Type: text/html; charset=UTF-8');
-require_once("views/common/header.php");
-require_once('models/User.class.php');
-require_once('controllers/crud.php');
+require_once "views/common/header.php";
+require_once 'models/User.class.php';
+require_once 'controllers/crud.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,6 +15,7 @@ require_once('controllers/crud.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link href="public/css/.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>inscription</title>
 
     <!-- Styles CSS -->
     <style>
@@ -221,6 +222,6 @@ require_once('controllers/crud.php');
 
 <!-- Après le formulaire -->
 
-<?php require_once("views/common/footer.php"); ?>
+<?php require_once "views/common/footer.php"; ?>
 
 </body>
