@@ -1,7 +1,7 @@
 <?php
 session_start();
 define("URL", str_replace("index.php", "", (isset($_SERVER['https']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']));
-require_once "./controllers/MainController.controller.php";
+require_once("./controllers/MainController.controller.php");
 $mc = new MainController();
 try {
     if (empty($_GET['page'])) {
@@ -18,17 +18,17 @@ try {
         case 'accueil':
             $mc->accueil();
             break;
-        case 'page1':
-            $mc->page1();
+        case 'Apropos':
+            $mc->Apropos();
             break;
-        case 'page2':
-            $mc->page2();
+        case 'programmes':
+            $mc->programmes();
             break;
-        case 'page3':
-            $mc->page3();
+        case 'Evenements':
+            $mc->Evenements();
             break;
-        case 'page4':
-            $mc->page4();
+        case 'galeries':
+            $mc->galeries();
             break;
         case 'contact':
             $mc->contact();
@@ -59,4 +59,4 @@ try {
     $mc->pageErreur($e->getMessage());
 }
 
-require_once "views/common/template.php";
+require_once("views/common/template.php");

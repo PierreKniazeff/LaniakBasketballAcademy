@@ -41,7 +41,6 @@ class LoginController
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute(array(':email' => $email));
-
             if ($stmt->rowCount() > 0) {
                 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (password_verify($password, $userData['password'])) {
@@ -64,14 +63,11 @@ class LoginController
                         $userData['confirmed'],
                         $userData['token']
                     );
-
                     // Stockage de l'instance $user dans la session
                     $_SESSION['user_logged_in'] = true;
                     $_SESSION['user'] = serialize($user); // Serialize pour stocker l'objet dans la session
                     $_SESSION['user_prenom'] = $user->getPrenom(); // Ajoutez cette ligne pour stocker le prénom
                     $_SESSION['email'] = $user->getEmail();  // Stocker l'email de l'utilisateur dans la session
-
-
                     // Redirection vers la page utilisateur.view.php
                     header('Location: https://levelnext.fr/views/utilisateur.view.php');
                     exit();
@@ -84,7 +80,6 @@ class LoginController
         } catch (PDOException $e) {
             // Log the error for debugging purposes
             error_log("Erreur de requête : " . $e->getMessage());
-
             // Afficher un message d'erreur générique à l'utilisateur
             die("Une erreur s'est produite. Veuillez réessayer ultérieurement.");
         }
