@@ -24,4 +24,4 @@ jobs:
         chmod +x vendor/bin/phpunit
 
     - name: Run PHP tests
-      run: vendor/bin/phpunit tests/
+      run: vendor/bin/phpunit tests laniak/
