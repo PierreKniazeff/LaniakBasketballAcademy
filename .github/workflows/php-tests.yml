@@ -15,8 +15,9 @@ jobs:
       with:
         php-version: '7.4'
 
-    - name: Install dependencies
-      run: composer install
+    - name: Install Composer dependencies
+      run: |
+        composer install
 
     - name: Run PHP tests
-      run: phpunit tests/
+      run: vendor/bin/phpunit tests/
