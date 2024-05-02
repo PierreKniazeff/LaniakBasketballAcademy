@@ -19,5 +19,9 @@ jobs:
       run: |
         composer install
 
+    - name: Grant execute permissions to PHPUnit
+      run: |
+        chmod +x vendor/bin/phpunit
+
     - name: Run PHP tests
       run: vendor/bin/phpunit tests/
