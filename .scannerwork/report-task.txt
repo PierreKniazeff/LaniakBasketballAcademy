@@ -1,0 +1,6 @@
+projectKey=Laniak1
+serverUrl=http://localhost:9000
+serverVersion=10.5.0.89998
+dashboardUrl=http://localhost:9000/dashboard?id=Laniak1
+ceTaskId=938797ec-1cd2-4ba7-9aa3-1064a76d9d5c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=938797ec-1cd2-4ba7-9aa3-1064a76d9d5c

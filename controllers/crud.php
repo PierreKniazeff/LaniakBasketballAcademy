@@ -98,9 +98,11 @@ class CRUD
             $tokenExpiration = new DateTime(); // Heure actuelle
             $tokenExpiration->add(new DateInterval('PT15M')); // Ajoute 15 minutes
 
-            $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel, date_naissance, genre, taille, poids, club, niveau_championnat, 
-        poste, objectifs, password, created_at, confirmed, token, token_expiration) VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, 
-        :taille, :poids, :club, :niveau_championnat, :poste, :objectifs, :password, NOW(), :confirmed, :token, :token_expiration)");
+            $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel,
+            date_naissance, genre, taille, poids, club, niveau_championnat, poste, objectifs, 
+            password, created_at, confirmed, token, token_expiration) 
+            VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, :taille, :poids, :club, 
+            :niveau_championnat, :poste, :objectifs, :password, NOW(), :confirmed, :token, :token_expiration)");
 
             // En plus des autres paramètres déjà liés
             $tokenExpirationFormatted = $tokenExpiration->format('Y-m-d H:i:s');
