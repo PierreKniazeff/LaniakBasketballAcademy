@@ -17,10 +17,10 @@
                 <p class="roboto-font text-justify" style="max-width: 100%;"><br>
                     Laniak ACADEMY c’est une communauté qui regroupe des individus en devenir avec une
                     volonté de s’améliorer et d’être meilleur.<br><br>
-                    On s’y attache à y allier plaisir et effort pour en faire ressortir une nouvelle mentalité.<br><br>
-                    Le solidarité, le respect, la discipline, l’esprit d’équipe sont les valeurs qui prédomines et
+                    On s’attache à y allier plaisir et effort pour en faire ressortir une nouvelle mentalité.<br><br>
+                    Le solidarité, le respect, la discipline, l’esprit d’équipe sont les valeurs qui prédominent et
                     qui y sont transmises.<br><br>
-                    Le partage de valeurs et de but communs y est essentiel car c’est ce qui conduira au
+                    Le partage de valeurs et de but communs y sont essentiels car c’est ce qui conduira au
                     challenge de soi à travers les autres. Se donner à 1000% est le principe fondateur qui mène
                     à la réussite.<br><br>
                     Laniak ACADEMY a pour but d’aider à cheminer vers la réalisation de soi.<br><br>

@@ -18,26 +18,26 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item <?php if ($page_title === 'Welcome') echo 'active'; ?>">
-                        <a class="nav-link" href="welcome">Welcome</a>
+                        <a class="nav-link" href="https://levelnext.fr/welcome">Welcome</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Accueil') echo 'active'; ?>">
-                        <a class="nav-link" href="accueil">Laniak</a>
+                        <a class="nav-link" href="https://levelnext.fr/accueil">Laniak</a>
                     </li>
                     <!-- Ajoutez ici les autres éléments de la barre de navigation -->
                     <li class="nav-item <?php if ($page_title === 'A propos') echo 'active'; ?>">
-                        <a class="nav-link" href="Apropos">A propos</a>
+                        <a class="nav-link" href="https://levelnext.fr/Apropos">A propos</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Programmes et Stages') echo 'active'; ?>">
-                        <a class="nav-link" href="programmes">Programmes</a>
+                        <a class="nav-link" href="https://levelnext.fr/programmes">Programmes</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Evenements') echo 'active'; ?>">
-                        <a class="nav-link" href="Evenements">Evénements et actualités</a>
+                        <a class="nav-link" href="https://levelnext.fr/Evenements">Evénements et actualités</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Galerie') echo 'active'; ?>">
-                        <a class="nav-link" href="galeries">Galeries</a>
+                        <a class="nav-link" href="https://levelnext.fr/galeries">Galeries</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Contact') echo 'active'; ?>">
-                        <a class="nav-link" href="contact">Contact</a>
+                        <a class="nav-link" href="https://levelnext.fr/contact">Contact</a>
                     </li>
                 </ul>
                 <div class="d-flex">
