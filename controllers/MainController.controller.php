@@ -66,8 +66,8 @@ class MainController
     public function Evenements()
     {
         $data_page = [
-            "page_title" => "Evenements",
-            "page_description" => "Description de la page Evenements",
+            "page_title" => "Evénements et actualités",
+            "page_description" => "Description de la page Evénements et actualités",
             "view" => "./views/Evenements.view.php",
             "template" => "views/common/template.php"
         ];
