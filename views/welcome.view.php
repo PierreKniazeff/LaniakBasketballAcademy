@@ -21,7 +21,7 @@
     /* Media queries pour adapter l'image de fond en fonction de la largeur de l'écran */
     @media (max-width: 990px) {
         body {
-            background-image: url('./public/assets/images/NewAccueil1.jpg');
+            background-image: url('./public/assets/images/NewAccueil4.jpg');
             /* Pour écrans <= 990px */
         }
 
