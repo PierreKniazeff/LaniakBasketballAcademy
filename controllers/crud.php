@@ -40,6 +40,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+
 $mailHost = $_ENV['SMTP_HOST'];
 $mailUsername = $_ENV['SMTP_USER'];
 $mailPassword = $_ENV['SMTP_PASS'];
@@ -171,6 +172,10 @@ class CRUD
         try {
             $mail = new PHPMailer(true); // Activer les exceptions
             $mail->CharSet = 'UTF-8'; // Définir le jeu de caractères à UTF-8
+
+            // Activer le débogage SMTP
+            $mail->SMTPDebug = 2; // 0 = désactivé, 1 = erreurs, 2 = détaillé
+
 
             // Configuration du serveur SMTP pour Hotmail/Outlook
             $mail->isSMTP();

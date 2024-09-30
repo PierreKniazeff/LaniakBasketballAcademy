@@ -40,8 +40,8 @@
                         <a class="nav-link" href="https://levelnext.fr/contact">Contact</a>
                     </li>
                 </ul>
-                <div class="d-flex">
-                    <img src="<?= BASE_URL ?>public/assets/images/USflag.PNG" alt="US Flag" width="30px" height="20px" style="margin-right: 10px;">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary" onclick="translateTextElements('en')" style="margin-right: 10px;">EN</button>
 
                     <?php
                         session_start();
