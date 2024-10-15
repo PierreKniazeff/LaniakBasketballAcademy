@@ -102,8 +102,10 @@ require_once 'controllers/crud.php';
         <h2 class="mb-4">Formulaire d'Inscription</h2>
 
         <p style="font-style: italic; font-weight: bold; margin-bottom: 15px;">
-            <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser
-                les programmes d'entraînement et d'améliorer votre expérience avec notre service.</strong>
+        <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser 
+                les programmes d'entraînement et d'améliorer votre expérience avec notre service, 
+                conformément à l'article 6 du RGPD, qui traite de la licéité du traitement des données 
+                (cf. <a href="https://levelnext.fr/views/common/MentionsLegales.php">mention légale ici</a>).</strong>
         </p>
         <form action="" method="POST" accept-charset="UTF-8">
             <div class="mb-3">
@@ -220,7 +222,10 @@ require_once 'controllers/crud.php';
         </form>
         <br>
         <p style="font-style: italic; font-weight: bold; margin-bottom: 15px;">
-            <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser les programmes d'entraînement et d'améliorer votre expérience avec notre service.</strong>
+        <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser 
+                les programmes d'entraînement et d'améliorer votre expérience avec notre service, 
+                conformément à l'article 6 du RGPD, qui traite de la licéité du traitement des données 
+                (cf. <a href="https://levelnext.fr/views/common/MentionsLegales.php">mention légale ici</a>).</strong>
         </p>
     </div>
 

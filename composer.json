@@ -4,7 +4,8 @@
         "vlucas/phpdotenv": "^5.6",
         "php-webdriver/webdriver": "^1.15",
         "league/oauth2-client": "^2.7",
-        "league/oauth2-server": "^4.1"
+        "league/oauth2-server": "^4.1",
+        "sendgrid/sendgrid": "^8.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6"

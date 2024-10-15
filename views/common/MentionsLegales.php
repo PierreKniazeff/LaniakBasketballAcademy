@@ -91,7 +91,7 @@ appliquez les explications en fonction de votre version de navigateur. <br><br>
 En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978, 
 la loi n° 2004-801  du 6 août 2004, l'article L. 226-13 du Code pénal ainsi que la Directive Européenne 
 du 24 octobre 1995. 
-Sur le site levelnext.fr, Pierre Kniazeff ne collecte pas d'informations personnelles 
+Sur le site levelnext.fr, Pierre Kniazeff ne collecte d'informations personnelles 
 (suivant l'article 4 loi n°78-17 du 06 janvier 1978) concernant l'usager que pour la nécéssité de certains 
 services offerts par le site levelnext.fr. L'utilisateur fournit ces données en pleine conscience de cause, 
 notamment quand il procède de lui-même à la saisie. Il est alors expliqué à l'usagé du site web levelnext.fr 

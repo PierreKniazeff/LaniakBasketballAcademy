@@ -190,7 +190,7 @@ class PasswordRecoveryController
         $mail->Port = $_ENV['SMTP_PORT']; // Port SMTP
 
         // Paramètres d'expéditeur et destinataire
-        $mail->setFrom('kniazeff.pierre@hotmail.fr', 'Laniak Basketball Academy');
+        $mail->setFrom('laniak@levelnext.fr', 'Laniak Basketball Academy');
         $mail->addAddress($email, $prenom); // Envoyer l'email à l'adresse de l'utilisateur
 
         // Contenu de l'email

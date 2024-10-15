@@ -55,10 +55,10 @@ if ($messageSent) {
 
     // Envoyer l'e-mail uniquement si les données sont valides
     if (!empty($nom) && filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($sujet) && !empty($message)) {
-        $to = "kniazeff.pierre@hotmail.fr";
+        $to = "laniak@levelnext.fr";
         // $to = "laniakbasketballacademy@gmail.com";
         $subject = "Nouveau Message de Contact Form Laniakbballacemy";
-        $headers = "From: laniakbasketballacademy@gmail.com";
+        $headers = "From: laniak@levelnext.fr";
 
         // Vérifier si l'e-mail est envoyé avec succès
         if (mail($to, $subject, $emailContent, $headers)) {
@@ -180,6 +180,10 @@ if ($messageSent) {
                 </p>
                 <button type="submit" name="pierre">Envoyer</button>
             </form><br><br>
+            <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser 
+                les programmes d'entraînement et d'améliorer votre expérience avec notre service, 
+                conformément à l'article 6 du RGPD, qui traite de la licéité du traitement des données 
+                (cf. <a href="https://levelnext.fr/views/common/MentionsLegales.php">mention légale ici</a>).</strong>
         <?php endif; ?>
     </div>
 
