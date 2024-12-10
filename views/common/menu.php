@@ -31,7 +31,10 @@
                         <a class="nav-link" href="https://levelnext.fr/programmes">Programmes</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Evenements') echo 'active'; ?>">
-                        <a class="nav-link" href="https://levelnext.fr/Evenements">Evénements et actualités</a>
+                        <a class="nav-link" href="https://levelnext.fr/Evenements">Actualités</a>
+                    </li>
+                    <li class="nav-item <?php if ($page_title === 'Equipements') echo 'active'; ?>">
+                        <a class="nav-link" href="https://levelnext.fr/Equipements">Équipements</a>
                     </li>
                     <li class="nav-item <?php if ($page_title === 'Galerie') echo 'active'; ?>">
                         <a class="nav-link" href="https://levelnext.fr/galeries">Galeries</a>
@@ -44,27 +47,27 @@
                     <button class="btn btn-outline-primary" onclick="translateTextElements('en')" style="margin-right: 10px;">EN</button>
 
                     <?php
-                        session_start();
+                    session_start();
 
-                        // Convertir la largeur de l'écran en nombre
-                        $screenWidth = isset($_COOKIE['screen_width']) ? intval($_COOKIE['screen_width']) : null;
+                    // Convertir la largeur de l'écran en nombre
+                    $screenWidth = isset($_COOKIE['screen_width']) ? intval($_COOKIE['screen_width']) : null;
 
-                        // Vérifier si l'utilisateur est connecté
-                        $userLoggedIn = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'];
+                    // Vérifier si l'utilisateur est connecté
+                    $userLoggedIn = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'];
 
-                        // Vérifier si la largeur de l'écran est inférieure ou égale à 990px
-                        $screenWidthBelow990 = $screenWidth !== null && $screenWidth <= 990;
+                    // Vérifier si la largeur de l'écran est inférieure ou égale à 990px
+                    $screenWidthBelow990 = $screenWidth !== null && $screenWidth <= 990;
 
-                        if ($userLoggedIn) {
-                            // L'utilisateur est connecté
-                            echo '<a href="profile.php" class="me-2 text-success"><i class="bi bi-person"></i>' . htmlspecialchars($_SESSION['user_prenom']) . '</a>';
-                            echo '<a href="../controllers/logout.php" class="text-link"><i class="bi bi-box-arrow-right"></i>Déconnexion</a>';
-                        } elseif (!($page_title === 'Welcome' && $screenWidthBelow990)) {
-                            // L'utilisateur n'est pas connecté et la condition pour ne pas afficher les liens est remplie
-                            echo '<a href="inscription" class="me-2 text-danger"><i class="bi bi-person-plus"></i>Inscription</a>';
-                            echo '<a href="connexion" class="text-link"><i class="bi bi-person"></i>Connexion</a>';
-                        }
-                    
+                    if ($userLoggedIn) {
+                        // L'utilisateur est connecté
+                        echo '<a href="profile.php" class="me-2 text-success"><i class="bi bi-person"></i>' . htmlspecialchars($_SESSION['user_prenom']) . '</a>';
+                        echo '<a href="../controllers/logout.php" class="text-link"><i class="bi bi-box-arrow-right"></i>Déconnexion</a>';
+                    } elseif (!($page_title === 'Welcome' && $screenWidthBelow990)) {
+                        // L'utilisateur n'est pas connecté et la condition pour ne pas afficher les liens est remplie
+                        echo '<a href="inscription" class="me-2 text-danger"><i class="bi bi-person-plus"></i>Inscription</a>';
+                        echo '<a href="connexion" class="text-link"><i class="bi bi-person"></i>Connexion</a>';
+                    }
+
                     ?>
 
                 </div>
@@ -147,18 +150,23 @@
             background-color: #000000;
             color: #ffffff;
         }
-     /* Media queries si nécessaire */
-     @media (min-width: 992px) and (max-width: 1200px) {
+
+        /* Media queries si nécessaire */
+        @media (min-width: 992px) and (max-width: 1200px) {
+
             /* Ajuster la taille du texte des nav items pour éviter les sauts de ligne */
             .navbar-nav .nav-link {
-                font-size: 0.65em; /* Ajustez la taille du texte selon vos besoins */
+                font-size: 0.65em;
+                /* Ajustez la taille du texte selon vos besoins */
             }
         }
 
-     @media (min-width: 1200px) and (max-width: 1400px) {
+        @media (min-width: 1200px) and (max-width: 1400px) {
+
             /* Ajuster la taille du texte des nav items pour éviter les sauts de ligne */
             .navbar-nav .nav-link {
-                font-size: 0.9em; /* Ajustez la taille du texte selon vos besoins */
+                font-size: 0.9em;
+                /* Ajustez la taille du texte selon vos besoins */
             }
         }
 

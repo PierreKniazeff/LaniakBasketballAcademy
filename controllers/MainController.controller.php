@@ -30,6 +30,18 @@ class MainController
         $this->genererPage($data_page);
     }
 
+    public function menuEn()
+    {
+        $data_page = [
+            "page_title" => "Menu Anglais",
+            "page_description" => "Bienvenue dans le menu anglais",
+            "view" => "./views/common/menuEn.php",
+            "template" => "views/common/template.php"
+        ];
+        $this->genererPage($data_page);
+    }
+
+
     public function accueil()
     {
         $data_page = [
@@ -63,12 +75,24 @@ class MainController
         $this->genererPage($data_page);
     }
 
+
     public function Evenements()
     {
         $data_page = [
             "page_title" => "Evénements et actualités",
             "page_description" => "Description de la page Evénements et actualités",
             "view" => "./views/Evenements.view.php",
+            "template" => "views/common/template.php"
+        ];
+        $this->genererPage($data_page);
+    }
+
+    public function Equipements()
+    {
+        $data_page = [
+            "page_title" => "Équipements associatifs",
+            "page_description" => "Description de la page Équipements associatifs",
+            "view" => "./views/Equipements.view.php",
             "template" => "views/common/template.php"
         ];
         $this->genererPage($data_page);

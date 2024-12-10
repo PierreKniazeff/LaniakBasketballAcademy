@@ -39,7 +39,7 @@ require_once __DIR__ . '/../models/User.class.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
-
+use PhpParser\Node\Name;
 
 $mailHost = $_ENV['SMTP_HOST'];
 $mailUsername = $_ENV['SMTP_USER'];
@@ -96,8 +96,8 @@ class CRUD
             $user->setToken($token);
 
             // Définir le token_expiration à 15 minutes à partir de maintenant
-            $tokenExpiration = new DateTime();
-            $tokenExpiration->add(new DateInterval('PT15M'));
+            $tokenExpiration = new DateTime(); // Heure actuelle
+            $tokenExpiration->add(new DateInterval('PT15M')); // Ajoute 15 minutes
 
             $stmt = $this->pdo->prepare("INSERT INTO inscription (prenom, nom, email, tel,
             date_naissance, genre, taille, poids, club, niveau_championnat, poste, objectifs, 
@@ -105,11 +105,14 @@ class CRUD
             VALUES (:prenom, :nom, :email, :tel, :date_naissance, :genre, :taille, :poids, :club, 
             :niveau_championnat, :poste, :objectifs, :password, NOW(), :confirmed, :token, :token_expiration)");
 
+            // En plus des autres paramètres déjà liés
             $tokenExpirationFormatted = $tokenExpiration->format('Y-m-d H:i:s');
             $stmt->bindParam(':token_expiration', $tokenExpirationFormatted);
 
+            // Hashing du mot de passe avant de l'insérer dans la base de données
             $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
 
+            // Ici, vous devez définir les variables avant de les passer à bindParam()
             $prenom = $user->getPrenom();
             $nom = $user->getNom();
             $email = $user->getEmail();
@@ -122,8 +125,8 @@ class CRUD
             $niveau_championnat = $user->getNiveauChampionnat();
             $poste = $user->getPoste();
             $objectifs = $user->getObjectifs();
-            $confirmed = 0;
-            $token = $user->getToken();
+            $confirmed = 0; // Supposition que l'utilisateur n'est pas confirmé à l'inscription
+            $token = $user->getToken(); // Généré précédemment dans ce bloc
 
             $stmt->bindParam(':prenom', $prenom);
             $stmt->bindParam(':nom', $nom);
@@ -137,30 +140,23 @@ class CRUD
             $stmt->bindParam(':niveau_championnat', $niveau_championnat);
             $stmt->bindParam(':poste', $poste);
             $stmt->bindParam(':objectifs', $objectifs);
-            $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':password', $hashedPassword); // Utilisation du mot de passe hashé
             $stmt->bindParam(':confirmed', $confirmed);
             $stmt->bindParam(':token', $token);
 
             $stmt->execute();
 
             // Envoi de l'e-mail de confirmation avec le lien de vérification
-            $emailResult = $this->sendVerificationEmail($user); // Vérifiez si l'envoi est réussi
+            $this->sendVerificationEmail($user);
 
             // Envoi de l'e-mail de confirmation
-            $emailConfirmationResult = $this->sendConfirmationEmail($user); // Vérifiez si l'envoi est réussi
+            $this->sendConfirmationEmail($user);
 
-            if ($emailResult['class'] === 'success' && $emailConfirmationResult['class'] === 'success') {
-                // Stockez l'e-mail de l'utilisateur dans la session
-                $_SESSION['user_email'] = $user->getEmail();
+            // Stockez l'e-mail de l'utilisateur dans la session
+            $_SESSION['user_email'] = $user->getEmail();
 
-                $result['message'] = "Attention: Inscription à finaliser via l'email de confirmation qui vous est envoyé.";
-                $result['class'] = "success";
-            } else {
-                // S'il y a eu une erreur lors de l'envoi des e-mails
-                $result['message'] = "Une erreur s'est produite lors de l'envoi de l'e-mail de confirmation. Veuillez contacter directement laniak@levelnext.fr";
-                $result['class'] = "error";
-            }
-
+            $result['message'] = "Attention: Inscription à finaliser via l'email de confirmation qui vous est envoyé.";
+            $result['class'] = "error";
             return $result;
         } catch (PDOException $e) {
             $result['message'] = "Une erreur s'est produite lors de l'inscription: veuillez contacter directement laniak@levelnext.fr " . $e->getMessage();
@@ -206,7 +202,8 @@ class CRUD
             $result['class'] = "success";
 
             return $result;
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
             $result['message'] = "Une erreur s'est produite lors de l'envoi de l'e-mail de confirmation. Veuillez réessayer.";
             $result['class'] = "error";
             return $result;
@@ -287,31 +284,17 @@ class CRUD
     }
 
     public function sendConfirmationEmail($user)
-{
-    $result = array();
-
-    $mail = new PHPMailer(true);
-    $mail->CharSet = 'UTF-8';
-
-    try {
-        // Configuration du serveur SMTP pour Hotmail/Outlook
-        $mail->isSMTP();
-        $mail->Host = $_ENV['SMTP_HOST'];
-        $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['SMTP_USER'];
-        $mail->Password = $_ENV['SMTP_PASS'];
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = $_ENV['SMTP_PORT'];
-
-        // Paramètres d'expéditeur et destinataire
-        $mail->setFrom($_ENV['SMTP_USER'], 'Laniak Basketball Academy');
-        $mail->addAddress('laniak@levelnext.fr', 'Laniak Basketball Academy');
-
+    {
+        $result = array();
+    
+        // Définir les destinataires
+        $to = 'kniazeff.pierre@hotmail.fr, laniakbasketballacademy@gmail.com';
+        $subject = 'Nouvelle inscription';
+    
         // Contenu de l'email
-        $mail->isHTML(true);
-        $mail->Subject = 'Nouvelle inscription';
-        $mail->Body = "
-        <p>Nouvelle inscription confirmée:</p>
+        $message = "
+        <p>Bonjour,<p>
+        <p>Nouvelle inscription confirmée sur votre site. Voici les détails:</p>
         Prénom: {$user->getPrenom()}<br>
         Nom: {$user->getNom()}<br>
         Email: {$user->getEmail()}<br>
@@ -324,19 +307,27 @@ class CRUD
         Niveau de championnat: {$user->getNiveauChampionnat()}<br>
         Poste: {$user->getPoste()}<br>
         Objectifs: {$user->getObjectifs()}<br>
-        <p>Merci.</p>";    
-
-        $mail->send();
-
-        $result['message'] = "L'e-mail de confirmation a été envoyé avec succès.";
-        $result['class'] = "success";
-    } catch (Exception $e) {
-        $result['message'] = "Votre profil joueur n'a pas pu être envoyé à LaniakBasketballAcademy. Veuillez contacter directement laniak@levelnext.fr. Erreur : " . $mail->ErrorInfo;
-        $result['class'] = "error";
+        <p>Merci.</p>
+        ";
+    
+        // En-têtes de l'email
+        $headers = 'From: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+                   'Reply-To: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+                   'MIME-Version: 1.0' . "\r\n" . // Version MIME
+                   'Content-type:text/html;charset=UTF-8' . "\r\n"; // Définit le type de contenu
+    
+        // Envoi de l'email
+        if (mail($to, $subject, $message, $headers)) {
+            $result['message'] = "L'e-mail de confirmation a été envoyé avec succès.";
+            $result['class'] = "success";
+        } else {
+            $result['message'] = "Votre profil joueur n'a pas pu être envoyé à LaniakBasketballAcademy. Veuillez contacter directement laniak@levelnext.fr.";
+            $result['class'] = "error";
+        }
+    
+        return $result;
     }
-
-    return $result;
-}
+    
 
 
     // Ajout d'une nouvelle méthode pour mettre à jour les informations de l'utilisateur

@@ -27,6 +27,9 @@ try {
         case 'Evenements':
             $mc->Evenements();
             break;
+        case 'Equipements':
+            $mc->Equipements();
+            break;
         case 'galeries':
             $mc->galeries();
             break;
@@ -50,6 +53,9 @@ try {
             break;
         case 'password_modification':
             $mc->password_modification();
+            break;
+        case 'menuEn':
+            $mc->menuEn(); // Ajout de la méthode pour afficher le menu en anglais
             break;
 
         default:
