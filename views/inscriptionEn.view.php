@@ -5,10 +5,10 @@ if (session_status() == PHP_SESSION_NONE) {
 header('Content-Type: text/html; charset=UTF-8');
 // require_once "views/common/header.php";
 require_once 'models/User.class.php';
-require_once 'controllers/crud.php';
+require_once 'controllers/crudEn.php';
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,7 +17,7 @@ require_once 'controllers/crud.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link href="public/css/.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>inscription</title>
+    <title>Registration</title>
 
     <!-- Styles CSS -->
     <style>
@@ -37,7 +37,7 @@ require_once 'controllers/crud.php';
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
             display: none;
-            /* Pour cacher par défaut */
+            /* To hide by default */
         }
 
         .overlay-content {
@@ -50,12 +50,10 @@ require_once 'controllers/crud.php';
 
         .invalid {
             color: red;
-
         }
 
         .valid {
             color: green;
-
         }
     </style>
 </head>
@@ -69,12 +67,12 @@ require_once 'controllers/crud.php';
         $password = $_POST['password'];
         $confirmPassword = $_POST['confirm_password'];
 
-        // Vérifiez ici si le mot de passe et la confirmation correspondent
+        // Check if password and confirmation match
         if ($password !== $confirmPassword) {
-            // Affichez un message d'erreur si les mots de passe ne correspondent pas
-            echo "<div class='error'>Les mots de passe ne correspondent pas!</div>";
+            // Display error message if passwords don't match
+            echo "<div class='error'>Passwords do not match!</div>";
         } else {
-            // Si les mots de passe correspondent, vous pouvez procéder avec la création de l'utilisateur
+            // If passwords match, proceed with user creation
             $user = new User(
                 $_POST['prenom'],
                 $_POST['nom'],
@@ -88,7 +86,7 @@ require_once 'controllers/crud.php';
                 $_POST['niveau_championnat'],
                 $_POST['poste'],
                 $_POST['objectifs'],
-                $password // Notez que nous n'envoyons plus confirm_password
+                $password // Note: we are not sending confirm_password
             );
 
             $result = $db->createUser($user);
@@ -97,55 +95,50 @@ require_once 'controllers/crud.php';
     }
     ?>
 
-
-    <!-- Affichage du formulaire d'inscription -->
-
+    <!-- Registration Form -->
     <div class="container">
-        <h2 class="mb-4">Formulaire d'Inscription</h2>
+        <h2 class="mb-4">Registration Form</h2>
 
         <p style="font-style: italic; font-weight: bold; margin-bottom: 15px;">
-            <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser
-                les programmes d'entraînement et d'améliorer votre expérience avec notre service,
-                conformément à l'article 6 du RGPD, qui traite de la licéité du traitement des données
-                (cf. <a href="https://levelnext.fr/views/common/MentionsLegales.php">mention légale ici</a>).</strong>
+            <strong>The data you provide will only be used to personalize training programs and improve your experience with our service, 
+                in accordance with Article 6 of the GDPR, which deals with the lawfulness of data processing 
+                (see <a href="https://levelnext.fr/views/common/MentionsLegales.php">legal notice here</a>).</strong>
         </p>
         <form action="" method="POST" accept-charset="UTF-8">
             <div class="mb-3">
-                <label for="prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
+                <label for="prenom" class="form-label">First Name <span class="text-danger">*</span></label>
                 <input type="text" id="prenom" name="prenom" class="form-control border-dark" required value="<?php echo isset($_POST['prenom']) ? htmlspecialchars($_POST['prenom']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="nom" class="form-label">Nom <span class="text-danger">*</span></label>
-                <input type="text" id="nom" name="nom" class="form-control border-dark"
-                    required value="<?php echo isset($_POST['nom']) ? htmlspecialchars($_POST['nom']) : ''; ?>">
+                <label for="nom" class="form-label">Last Name <span class="text-danger">*</span></label>
+                <input type="text" id="nom" name="nom" class="form-control border-dark" required value="<?php echo isset($_POST['nom']) ? htmlspecialchars($_POST['nom']) : ''; ?>">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                <input type="email" id="email" name="email" class="form-control border-dark"
-                    required value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
-                <small id="emailHelp" class="form-text text-muted">Veuillez entrer une adresse e-mail valide.</small>
+                <input type="email" id="email" name="email" class="form-control border-dark" required value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
+                <small id="emailHelp" class="form-text text-muted">Please enter a valid email address.</small>
             </div>
             <div class="mb-3">
-                <label for="tel" class="form-label">Tel <span class="text-danger">*</span></label>
+                <label for="tel" class="form-label">Phone <span class="text-danger">*</span></label>
                 <input type="tel" id="tel" name="tel" class="form-control border-dark" required value="<?php echo isset($_POST['tel']) ? htmlspecialchars($_POST['tel']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="date_naissance" class="form-label">Date de naissance <span class="text-danger">*</span></label>
+                <label for="date_naissance" class="form-label">Date of Birth <span class="text-danger">*</span></label>
                 <input type="date" id="date_naissance" name="date_naissance" class="form-control border-dark" required value="<?php echo isset($_POST['date_naissance']) ? htmlspecialchars($_POST['date_naissance']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="genre" class="form-label">Genre <span class="text-danger">*</span></label>
+                <label for="genre" class="form-label">Gender <span class="text-danger">*</span></label>
                 <select id="genre" name="genre" class="form-control border-dark" required>
-                    <option value="masculin" <?php echo (isset($_POST['genre']) && $_POST['genre'] == 'masculin') ? 'selected' : ''; ?>>Masculin</option>
-                    <option value="féminin" <?php echo (isset($_POST['genre']) && $_POST['genre'] == 'féminin') ? 'selected' : ''; ?>>Féminin</option>
+                    <option value="masculin" <?php echo (isset($_POST['genre']) && $_POST['genre'] == 'masculin') ? 'selected' : ''; ?>>Male</option>
+                    <option value="féminin" <?php echo (isset($_POST['genre']) && $_POST['genre'] == 'féminin') ? 'selected' : ''; ?>>Female</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="taille" class="form-label">Taille (cm) <span class="text-danger">*</span></label>
+                <label for="taille" class="form-label">Height (cm) <span class="text-danger">*</span></label>
                 <input type="number" id="taille" name="taille" class="form-control border-dark" required value="<?php echo isset($_POST['taille']) ? htmlspecialchars($_POST['taille']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="poids" class="form-label">Poids (kg) <span class="text-danger">*</span></label>
+                <label for="poids" class="form-label">Weight (kg) <span class="text-danger">*</span></label>
                 <input type="number" id="poids" name="poids" class="form-control border-dark" required value="<?php echo isset($_POST['poids']) ? htmlspecialchars($_POST['poids']) : ''; ?>">
             </div>
             <div class="mb-3">
@@ -153,30 +146,30 @@ require_once 'controllers/crud.php';
                 <input type="text" id="club" name="club" class="form-control border-dark" value="<?php echo isset($_POST['club']) ? htmlspecialchars($_POST['club']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="niveau_championnat" class="form-label">Niveau de championnat <span class="text-danger">*</span></label>
+                <label for="niveau_championnat" class="form-label">League Level <span class="text-danger">*</span></label>
                 <input type="text" id="niveau_championnat" name="niveau_championnat" class="form-control border-dark" required value="<?php echo isset($_POST['niveau_championnat']) ? htmlspecialchars($_POST['niveau_championnat']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="poste" class="form-label">Poste</label>
+                <label for="poste" class="form-label">Position</label>
                 <input type="text" id="poste" name="poste" class="form-control border-dark" value="<?php echo isset($_POST['poste']) ? htmlspecialchars($_POST['poste']) : ''; ?>">
             </div>
             <div class="mb-3">
-                <label for="objectifs" class="form-label">Objectifs</label>
+                <label for="objectifs" class="form-label">Goals</label>
                 <textarea id="objectifs" name="objectifs" class="form-control border-dark" rows="4"><?php echo isset($_POST['objectifs']) ? htmlspecialchars($_POST['objectifs']) : ''; ?></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
+                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                 <input type="password" id="password" name="password" class="form-control border-dark" required>
                 <span toggle="#password" class="fa fa-fw fa-eye field-icon"></span><br>
-                <!-- Instructions pour les critères du mot de passe ajoutées ici -->
+                <!-- Instructions for password criteria added here -->
                 <div id="passwordCriteria" style="margin-top: 10px;">
-                    Votre mot de passe doit contenir :
+                    Your password must contain:
                     <ul>
-                        <li id="length" class="invalid">Au moins 8 caractères</li>
-                        <li id="uppercase" class="invalid">Une majuscule</li>
-                        <li id="number" class="invalid">Un chiffre</li>
-                        <li id="special" class="invalid">Un caractère spécial (ex: !, @, #)</li>
+                        <li id="length" class="invalid">At least 8 characters</li>
+                        <li id="uppercase" class="invalid">One uppercase letter</li>
+                        <li id="number" class="invalid">One number</li>
+                        <li id="special" class="invalid">One special character (ex: !, @, #)</li>
                     </ul>
                 </div>
                 <script>
@@ -215,24 +208,26 @@ require_once 'controllers/crud.php';
                 </script>
             </div>
             <div class="mb-3">
-                <label for="confirm_password" class="form-label">Confirmation mot de passe <span class="text-danger">*</span></label>
+                <label for="confirm_password" class="form-label">Confirm Password <span class="text-danger">*</span></label>
                 <input type="password" id="confirm_password" name="confirm_password" class="form-control border-dark" required>
                 <span toggle="#confirm_password" class="fa fa-fw fa-eye field-icon"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Soumettre le formulaire</button>
+            <button type="submit" class="btn btn-primary">Submit the Form</button>
         </form>
         <br>
         <p style="font-style: italic; font-weight: bold; margin-bottom: 15px;">
-            <strong>Les données que vous fournissez seront utilisées uniquement dans le but de personnaliser
-                les programmes d'entraînement et d'améliorer votre expérience avec notre service,
-                conformément à l'article 6 du RGPD, qui traite de la licéité du traitement des données
-                (cf. <a href="https://levelnext.fr/views/common/MentionsLegales.php">mention légale ici</a>).</strong>
+            <strong>The data you provide will only be used to personalize 
+                training programs and improve your experience with our service, 
+                in accordance with Article 6 of the GDPR, which deals with the lawfulness of data processing 
+                (see <a href="https://levelnext.fr/views/common/MentionsLegales.php">legal notice here</a>).</strong>
         </p>
     </div>
 
-    <!-- Après le formulaire -->
+    <!-- After the form -->
 
     <?php require_once "views/common/footer.php"; ?>
 
 </body>
+
+</html>

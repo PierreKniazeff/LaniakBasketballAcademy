@@ -6,7 +6,6 @@
 </head>
 
 <body>
-
     <div class="container-sm">
         <div class="row">
             <div class="col-lg-6">

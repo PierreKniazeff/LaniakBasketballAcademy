@@ -8,25 +8,18 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../views/common/header.php';
 require_once __DIR__ . '/../models/User.class.php';
 
+// Démarrer la session si elle n'est pas déjà active
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
-    if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in']) {
-        // Désérialisation de l'objet User
-        $user = unserialize($_SESSION['user']);
-        // Ici, vous pouvez utiliser $user comme un objet de la classe User
-        echo "Bienvenue, " . htmlspecialchars($user->getPrenom());
-        // Affichez d'autres détails comme désiré
-
-        // Par exemple, si vous avez besoin de lire le nom :
-        echo "Nom : " . htmlspecialchars($user->getNom());
-    } else {
-        // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion.
-        echo "<script>window.location.href = 'https://levelnext.fr/views/connexion.view.php';</script>";
-        exit;
-    }
 }
 
-// Récupérer les informations de l'utilisateur de la session
+// Vérification de l'état de connexion de l'utilisateur
+if (!isset($_SESSION['user_logged_in']) || !$_SESSION['user_logged_in']) {
+    echo "<script>window.location.href = '" . URL . "views/connexion.view.php';</script>"; // Rediriger vers la page de connexion
+    exit;
+}
+
+// Désérialisation de l'objet User
 if (isset($_SESSION['user'])) {
     $user = unserialize($_SESSION['user']);
 } else {
@@ -37,12 +30,6 @@ if (isset($_SESSION['user'])) {
 // Traitement du formulaire lorsque celui-ci est soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     require_once(__DIR__ . '/../controllers/login.php');
-    // Vérifiez si l'utilisateur est connecté via son email
-    if (!isset($_SESSION['email'])) {
-        // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
-        echo "<script>window.location.href = 'https://levelnext.fr/controllers/login.php';</script>";
-        exit;
-    }
 
     // Récupérez les données du formulaire
     $prenom = $_POST['prenom'] ?? '';
@@ -62,8 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     $email = $_SESSION['email'];
 
     // Effectuez la mise à jour des informations personnelles de l'utilisateur
-    // Utilisez votre méthode updateUserField ou une autre méthode appropriée de votre classe CRUD/UserController
-    $LoginController = new LoginController(); // Remplacez par votre instanciation
+    $LoginController = new LoginController(); // Instanciation de votre contrôleur
 
     // Mettez à jour chaque champ individuellement
     $result = $LoginController->updateUserField($email, 'prenom', $prenom);
@@ -78,13 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     $result .= $LoginController->updateUserField($email, 'poste', $poste);
     $result .= $LoginController->updateUserField($email, 'objectifs', $objectifs);
 
-    // Affichez les résultats de la mise à jour ou les messages de succès/erreur
+    // Gestion des messages de succès ou d'erreur
     if ($result) {
         $successMessage = "Les informations ont été mises à jour avec succès.";
 
-        // Si la mise à jour a réussi, récupérez à nouveau les données de l'utilisateur
-        $user = unserialize($_SESSION['user']);
-        // Mettez à jour les données de l'utilisateur avec les nouvelles données de la base de données
+        // Mise à jour dans la session
         $user->setPrenom($prenom);
         $user->setNom($nom);
         $user->setTel($tel);
@@ -97,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
         $user->setPoste($poste);
         $user->setObjectifs($objectifs);
 
-        // Stockez à nouveau l'objet utilisateur mis à jour dans la session
+        // Enregistrer les nouvelles données de l'utilisateur dans la session
         $_SESSION['user'] = serialize($user);
     } else {
         $errorMessage = "Une erreur s'est produite lors de la mise à jour des informations. Veuillez réessayer.";
@@ -117,53 +101,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
     <meta charset="UTF-8">
     <title>Espace Membre</title>
 
-
     <style>
-        /* Styles existants */
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #F5F5F5;
         }
-
         .form-group {
             margin-bottom: 15px;
             display: flex;
             align-items: center;
         }
-
         .form-label {
             flex: 0 0 120px;
             font-weight: bold;
             margin-right: 10px;
             color: #333;
         }
-
-        .form-content {
-            flex: 1;
-        }
-
-        .field-icon {
-            cursor: pointer;
-        }
-
-        /* Nouveaux styles pour centrer la div container */
         .container {
             max-width: 600px;
-            /* Ajustez la largeur maximale selon vos besoins */
             background-color: #fff;
-            /* Ajoutez une couleur de fond pour la div container */
             padding: 20px;
-            /* Ajoutez un espacement intérieur pour le contenu */
             border-radius: 10px;
-            /* Facultatif : ajoutez des bordures arrondies */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Facultatif : ajoutez une ombre */
             margin: 50px auto;
-            /* Centre la div container horizontalement avec une marge supérieure */
         }
-
         .edit-btn {
             border: 1px solid #007bff;
             color: #007bff;
@@ -172,58 +135,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
             border-radius: 0.25rem;
             cursor: pointer;
             margin-left: 10px;
-            /* Pour un peu d'espacement autour du bouton */
             transition: all 0.3s ease;
         }
-
         .edit-btn:hover,
         .edit-btn:focus {
             background: #007bff;
             color: white;
             outline: none;
         }
-
-        .form-control[readonly] {
-            background-color: transparent;
-            border-color: rgba(0, 0, 0, 0.1);
-            cursor: not-allowed;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h2 class="mb-4">Vos informations personnelles</h2>
+        <h2 class="mb-4">Vos Informations Personnelles</h2>
 
         <form method="post" action="">
-
             <div class="form-group">
-                <label for="prenom" class="form-label">Prénom:</label>
+                <label for="prenom" class="form-label">Prénom :</label>
                 <input type="text" id="prenom" name="prenom" value="<?= htmlspecialchars($user->getPrenom()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="nom" class="form-label">Nom:</label>
+                <label for="nom" class="form-label">Nom :</label>
                 <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($user->getNom()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" class="form-control">
+                <label for="email" class="form-label">Email :</label>
+                <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" class="form-control" readonly>
             </div>
 
             <div class="form-group">
-                <label for="tel" class="form-label">Téléphone:</label>
+                <label for="tel" class="form-label">Téléphone :</label>
                 <input type="text" id="tel" name="tel" value="<?= htmlspecialchars($user->getTel()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="date_naissance" class="form-label">Date de Naissance:</label>
+                <label for="date_naissance" class="form-label">Date de Naissance :</label>
                 <input type="date" id="date_naissance" name="date_naissance" value="<?= htmlspecialchars($user->getDateNaissance()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="genre" class="form-label">Genre:</label>
+                <label for="genre" class="form-label">Genre :</label>
                 <select id="genre" name="genre" class="form-control">
                     <option value="masculin" <?= ($user->getGenre() == 'masculin') ? 'selected' : '' ?>>Masculin</option>
                     <option value="féminin" <?= ($user->getGenre() == 'féminin') ? 'selected' : '' ?>>Féminin</option>
@@ -231,41 +185,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveButton'])) {
             </div>
 
             <div class="form-group">
-                <label for="taille" class="form-label">Taille:</label>
+                <label for="taille" class="form-label">Taille :</label>
                 <input type="number" id="taille" name="taille" value="<?= htmlspecialchars($user->getTaille()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="poids" class="form-label">Poids:</label>
+                <label for="poids" class="form-label">Poids :</label>
                 <input type="number" id="poids" name="poids" value="<?= htmlspecialchars($user->getPoids()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="club" class="form-label">Club:</label>
+                <label for="club" class="form-label">Club :</label>
                 <input type="text" id="club" name="club" value="<?= htmlspecialchars($user->getClub()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="niveau_championnat" class="form-label">Niveau de Championnat:</label>
+                <label for="niveau_championnat" class="form-label">Niveau Championnat :</label>
                 <input type="text" id="niveau_championnat" name="niveau_championnat" value="<?= htmlspecialchars($user->getNiveauChampionnat()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="poste" class="form-label">Poste:</label>
+                <label for="poste" class="form-label">Poste :</label>
                 <input type="text" id="poste" name="poste" value="<?= htmlspecialchars($user->getPoste()) ?>" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="objectifs" class="form-label">Objectifs:</label>
+                <label for="objectifs" class="form-label">Objectifs :</label>
                 <textarea id="objectifs" name="objectifs" class="form-control"><?= htmlspecialchars($user->getObjectifs()) ?></textarea>
             </div>
 
             <button type="submit" name="saveButton" class="btn btn-primary">Modifier</button>
             <?php if (isset($errorMessage)) : ?>
-                <div><?= $errorMessage ?></div>
+                <div class="alert alert-danger"><?= $errorMessage ?></div>
             <?php endif; ?>
             <?php if (isset($successMessage)) : ?>
-                <div class="success"><?= $successMessage ?></div>
+                <div class="alert alert-success"><?= $successMessage ?></div>
             <?php endif; ?>
         </form>
     </div>

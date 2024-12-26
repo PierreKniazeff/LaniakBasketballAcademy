@@ -37,7 +37,7 @@ if (file_exists($envFilePath)) {
 // Inclure le fichier de configuration de la base de données
 $config = require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/User.class.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+// require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -177,33 +177,71 @@ class PasswordRecoveryController
     // Utiliser le bon token pour construire le lien de réinitialisation du mot de passe
     $resetLink = 'https://levelnext.fr/views/password_modification.view.php?token=' . urlencode($resetToken);
 
-    $mail = new PHPMailer(true); // Activer les exceptions
-    $mail->CharSet = 'UTF-8'; // Définir le jeu de caractères à UTF-8
-    try {
-        // Configuration du serveur SMTP
-        $mail->isSMTP();
-        $mail->Host = $_ENV['SMTP_HOST']; // Serveur SMTP
-        $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['SMTP_USER']; // Votre adresse email
-        $mail->Password = $_ENV['SMTP_PASS']; // Mot de passe de votre adresse email
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Cryptage TLS
-        $mail->Port = $_ENV['SMTP_PORT']; // Port SMTP
+    // Définir les destinataires
+    $subject = 'Réinitialisation de votre mot de passe';
 
-        // Paramètres d'expéditeur et destinataire
-        $mail->setFrom('laniak@levelnext.fr', 'Laniak Basketball Academy');
-        $mail->addAddress($email, $prenom); // Envoyer l'email à l'adresse de l'utilisateur
+    // Contenu de l'email
+    $message = "
+    <p>Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :</p>
+    <p><a href='{$resetLink}'>Réinitialiser le mot de passe</a></p>
+    <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>";
 
-        // Contenu de l'email
-        $mail->isHTML(true); // Définir le format de l'email à HTML
-        $mail->Subject = 'Réinitialisation de votre mot de passe';
-        $mail->Body = "<p>Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :</p>
-        <p><a href='{$resetLink}'>Réinitialiser le mot de passe</a></p>
-        <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>";
+    // En-têtes de l'email
+    $headers = 'From: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+               'Reply-To: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+               'MIME-Version: 1.0' . "\r\n" . // Version MIME
+               'Content-type:text/html;charset=UTF-8' . "\r\n"; // Définit le type de contenu
 
-        $mail->send();
-    } catch (Exception $e) {
+    // Envoi de l'email
+    if (mail($email, $subject, $message, $headers)) {
+        // Optionnel : vous pouvez gérer la confirmation d'envoi ici si nécessaire
+    } else {
         // Gérer les erreurs d'envoi d'email de manière appropriée
-        die("Erreur d'envoi d'email : " . $e->getMessage());
+        die("Erreur d'envoi d'email. Veuillez vérifier l'adresse e-mail ou les paramètres du serveur.");
     }
 }
+
+
+//     public function sendPasswordResetEmail($user)
+// {
+//     // Récupérer les données de l'utilisateur depuis le tableau
+//     $email = $user['email'];
+//     $prenom = $user['prenom'];
+//     $resetToken = $user['reset_token']; // Utiliser le token correctement récupéré depuis les données de l'utilisateur
+
+//     // Tronquer le token s'il est plus long que 32 caractères
+//     $resetToken = substr($resetToken, 0, 32);
+
+//     // Utiliser le bon token pour construire le lien de réinitialisation du mot de passe
+//     $resetLink = 'https://levelnext.fr/views/password_modification.view.php?token=' . urlencode($resetToken);
+
+//     $mail = new PHPMailer(true); // Activer les exceptions
+//     $mail->CharSet = 'UTF-8'; // Définir le jeu de caractères à UTF-8
+//     try {
+//         // Configuration du serveur SMTP
+//         $mail->isSMTP();
+//         $mail->Host = $_ENV['SMTP_HOST']; // Serveur SMTP
+//         $mail->SMTPAuth = true;
+//         $mail->Username = $_ENV['SMTP_USER']; // Votre adresse email
+//         $mail->Password = $_ENV['SMTP_PASS']; // Mot de passe de votre adresse email
+//         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Cryptage TLS
+//         $mail->Port = $_ENV['SMTP_PORT']; // Port SMTP
+
+//         // Paramètres d'expéditeur et destinataire
+//         $mail->setFrom('laniak@levelnext.fr', 'Laniak Basketball Academy');
+//         $mail->addAddress($email, $prenom); // Envoyer l'email à l'adresse de l'utilisateur
+
+//         // Contenu de l'email
+//         $mail->isHTML(true); // Définir le format de l'email à HTML
+//         $mail->Subject = 'Réinitialisation de votre mot de passe';
+//         $mail->Body = "<p>Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :</p>
+//         <p><a href='{$resetLink}'>Réinitialiser le mot de passe</a></p>
+//         <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>";
+
+//         $mail->send();
+//     } catch (Exception $e) {
+//         // Gérer les erreurs d'envoi d'email de manière appropriée
+//         die("Erreur d'envoi d'email : " . $e->getMessage());
+//     }
+// }
 }

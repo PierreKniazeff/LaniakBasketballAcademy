@@ -1,19 +1,19 @@
 <?php
-// session_start(); // Démarre la session au tout début du script
+// session_start(); // Start the session at the very beginning of the script
 // require_once __DIR__ . '/../views/common/header.php';
 
-// Définition des messages de succès et d'erreur
-$successMessage = isset($_GET['success']) && $_GET['success'] == 1 ? "Connexion réussie!" : "";
-$errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Identifiants incorrects. Veuillez réessayer." : "";
+// Define success and error messages
+$successMessage = isset($_GET['success']) && $_GET['success'] == 1 ? "Login successful!" : "";
+$errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Incorrect credentials. Please try again." : "";
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connexion</title>
+    <title>Login</title>
 
     <!-- Styles CSS -->
     <style>
@@ -21,44 +21,41 @@ $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Identifiants inc
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #F5F5F5;
-            /* Blanc pour le fond de la page */
+            background-color: #F5F5F5; /* White for the page background */
         }
-
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h2 class="mb-4">Formulaire de Connexion</h2>
+        <h2 class="mb-4">Login Form</h2>
 
-        <!-- Afficher le message de succès -->
+        <!-- Display success message -->
         <?php if ($successMessage): ?>
             <div class="alert alert-success"><?= $successMessage ?></div>
         <?php endif; ?>
 
-        <!-- Afficher le message d'erreur -->
+        <!-- Display error message -->
         <?php if ($errorMessage): ?>
             <div class="alert alert-danger"><?= $errorMessage ?></div>
         <?php endif; ?>
 
-        <form action="controllers/login.php" method="POST">
+        <form action="controllers/loginEn.php" method="POST">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" id="email" name="email" class="form-control border-dark" required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Mot de passe</label>
+                <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="password" class="form-control border-dark" required>
             </div>
-            <button type="submit" class="btn btn-primary">Se connecter</button>
-            <a href="https://levelnext.fr/views/password_recovery.view.php" class="btn btn-secondary">Mot de passe oublié</a>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a href="https://levelnext.fr/views/password_recoveryEn.view.php" class="btn btn-secondary">Forgot Password</a>
         </form>
     </div>
 
     <?php require_once __DIR__ . '/../views/common/footer.php'; ?>
 
 </body>
-
 </html>

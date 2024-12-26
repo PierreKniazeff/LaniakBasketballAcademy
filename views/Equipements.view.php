@@ -50,7 +50,28 @@
 
                             </a>
                         </div>
-                    </div>
+                        <div style="margin-top: 20px;">
+                            <div class="d-flex justify-content-center">
+                                <a class="nav-link" href="https://levelnext.fr/contact">
+                                    <img src="./public/assets/images/Equipement7.jpg" alt="Equipement5" style="width: 1000px; height: auto; max-width: 100%;">
+
+                                </a>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <div class="d-flex justify-content-center">
+                                    <a class="nav-link" href="https://levelnext.fr/contact">
+                                        <img src="./public/assets/images/Equipement6.jpg" alt="Equipement5" style="width: 1000px; height: auto; max-width: 100%;">
+
+                                    </a>
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <div class="d-flex justify-content-center">
+                                        <a class="nav-link" href="https://levelnext.fr/contact">
+                                            <img src="./public/assets/images/Equipement8.jpg" alt="Equipement5" style="width: 1000px; height: auto; max-width: 100%;">
+
+                                        </a>
+                                    </div>
+                                </div>
 
 </body>
 

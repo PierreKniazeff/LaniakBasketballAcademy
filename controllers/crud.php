@@ -36,15 +36,15 @@ if (file_exists($envFilePath)) {
 
 
 require_once __DIR__ . '/../models/User.class.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+// require_once __DIR__ . '/../vendor/autoload.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PhpParser\Node\Name;
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PhpParser\Node\Name;
 
-$mailHost = $_ENV['SMTP_HOST'];
-$mailUsername = $_ENV['SMTP_USER'];
-$mailPassword = $_ENV['SMTP_PASS'];
-$mailPort = $_ENV['SMTP_PORT'];
+// $mailHost = $_ENV['SMTP_HOST'];
+// $mailUsername = $_ENV['SMTP_USER'];
+// $mailPassword = $_ENV['SMTP_PASS'];
+// $mailPort = $_ENV['SMTP_PORT'];
 
 class CRUD
 {
@@ -164,50 +164,81 @@ class CRUD
             return $result;
         }
     }
+    // public function sendVerificationEmail($user)
+    // {
+    //     $result = array();
+
+    //     try {
+    //         $mail = new PHPMailer(true); // Activer les exceptions
+    //         $mail->CharSet = 'UTF-8'; // Définir le jeu de caractères à UTF-8
+
+    //         // Activer le débogage SMTP
+    //         $mail->SMTPDebug = 0; // 0 = désactivé, 1 = erreurs, 2 = détaillé
+
+
+    //         // Configuration du serveur SMTP pour Hotmail/Outlook
+    //         $mail->isSMTP();
+    //         $mail->Host = $_ENV['SMTP_HOST']; // Serveur SMTP de Hotmail/Outlook
+    //         $mail->SMTPAuth = true;
+    //         $mail->Username = $_ENV['SMTP_USER']; // Votre adresse email Hotmail/Outlook
+    //         $mail->Password = $_ENV['SMTP_PASS']; // Mot de passe de votre adresse email
+    //         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Cryptage TLS
+    //         $mail->Port = $_ENV['SMTP_PORT']; // Port SMTP pour Hotmail/Outlook
+
+    //         // Paramètres d'expéditeur et destinataire
+    //         $mail->setFrom($_ENV['SMTP_USER'], 'Laniak Basketball Academy');
+    //         $mail->addAddress($user->getEmail()); // Envoyer l'email à l'adresse de l'utilisateur
+
+    //         // Contenu de l'email
+    //         $mail->isHTML(true); // Définir le format de l'email à HTML
+    //         $mail->Subject = 'Confirmation d\'inscription';
+    //         $mail->Body = "
+    //         <p>Merci de vous être inscrit ! Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant :</p>
+    //         <p><a href='http://levelnext.fr/views/confirmation.view.php?token=" . urlencode($user->getToken()) . "&email=" . urlencode($user->getEmail()) . "'>Confirmer l'inscription</a></p>";
+
+    //         $mail->send();
+
+    //         $result['message'] = "Le formulaire a été soumis avec succès. Un e-mail contenant un code de vérification vous a été envoyé. Veuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.";
+    //         $result['class'] = "success";
+
+    //         return $result;
+    //     } 
+    //     catch (Exception $e) {
+    //         $result['message'] = "Une erreur s'est produite lors de l'envoi de l'e-mail de confirmation. Veuillez réessayer.";
+    //         $result['class'] = "error";
+    //         return $result;
+    //     }
+    // }
+
     public function sendVerificationEmail($user)
     {
         $result = array();
 
-        try {
-            $mail = new PHPMailer(true); // Activer les exceptions
-            $mail->CharSet = 'UTF-8'; // Définir le jeu de caractères à UTF-8
+        // Définir les destinataires
+        $to = $user->getEmail();
+        $subject = 'Vérification de votre adresse e-mail';
 
-            // Activer le débogage SMTP
-            $mail->SMTPDebug = 0; // 0 = désactivé, 1 = erreurs, 2 = détaillé
+        // Contenu de l'email
+        $message = "
+    <p>Merci de vous être inscrit ! Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant :</p>
+    <p><a href='http://levelnext.fr/views/confirmation.view.php?token=" . urlencode($user->getToken()) . "&email=" . urlencode($user->getEmail()) . "'>Confirmer l'inscription</a></p>";
 
+        // En-têtes de l'email
+        $headers = 'From: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+            'Reply-To: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+            'MIME-Version: 1.0' . "\r\n" . // Version MIME
+            'Content-type:text/html;charset=UTF-8' . "\r\n"; // Définit le type de contenu
 
-            // Configuration du serveur SMTP pour Hotmail/Outlook
-            $mail->isSMTP();
-            $mail->Host = $_ENV['SMTP_HOST']; // Serveur SMTP de Hotmail/Outlook
-            $mail->SMTPAuth = true;
-            $mail->Username = $_ENV['SMTP_USER']; // Votre adresse email Hotmail/Outlook
-            $mail->Password = $_ENV['SMTP_PASS']; // Mot de passe de votre adresse email
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Cryptage TLS
-            $mail->Port = $_ENV['SMTP_PORT']; // Port SMTP pour Hotmail/Outlook
-
-            // Paramètres d'expéditeur et destinataire
-            $mail->setFrom($_ENV['SMTP_USER'], 'Laniak Basketball Academy');
-            $mail->addAddress($user->getEmail()); // Envoyer l'email à l'adresse de l'utilisateur
-
-            // Contenu de l'email
-            $mail->isHTML(true); // Définir le format de l'email à HTML
-            $mail->Subject = 'Confirmation d\'inscription';
-            $mail->Body = "
-            <p>Merci de vous être inscrit ! Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant :</p>
-            <p><a href='http://levelnext.fr/views/confirmation.view.php?token=" . urlencode($user->getToken()) . "&email=" . urlencode($user->getEmail()) . "'>Confirmer l'inscription</a></p>";
-
-            $mail->send();
-
-            $result['message'] = "Le formulaire a été soumis avec succès. Un e-mail contenant un code de vérification vous a été envoyé. Veuillez vérifier votre boîte de réception et cliquer sur le bouton ci-dessous pour entrer le code de vérification et confirmer votre inscription.";
+        // Envoi de l'email
+        if (mail($to, $subject, $message, $headers)) {
+            $result['message'] = "L'e-mail de vérification a été envoyé avec succès.";
             $result['class'] = "success";
-
-            return $result;
-        } 
-        catch (Exception $e) {
-            $result['message'] = "Une erreur s'est produite lors de l'envoi de l'e-mail de confirmation. Veuillez réessayer.";
+        } else {
+            $result['message'] = "Une erreur s'est produite lors de l'envoi de l'e-mail de vérification. Veuillez réessayer.";
             $result['class'] = "error";
-            return $result;
         }
+
+        return $result;
     }
 
 
@@ -286,11 +317,11 @@ class CRUD
     public function sendConfirmationEmail($user)
     {
         $result = array();
-    
+
         // Définir les destinataires
         $to = 'kniazeff.pierre@hotmail.fr, laniakbasketballacademy@gmail.com';
         $subject = 'Nouvelle inscription';
-    
+
         // Contenu de l'email
         $message = "
         <p>Bonjour,<p>
@@ -309,13 +340,13 @@ class CRUD
         Objectifs: {$user->getObjectifs()}<br>
         <p>Merci.</p>
         ";
-    
+
         // En-têtes de l'email
         $headers = 'From: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
-                   'Reply-To: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
-                   'MIME-Version: 1.0' . "\r\n" . // Version MIME
-                   'Content-type:text/html;charset=UTF-8' . "\r\n"; // Définit le type de contenu
-    
+            'Reply-To: laniak@levelnext.fr' . "\r\n" . // Remplacez par votre adresse email
+            'MIME-Version: 1.0' . "\r\n" . // Version MIME
+            'Content-type:text/html;charset=UTF-8' . "\r\n"; // Définit le type de contenu
+
         // Envoi de l'email
         if (mail($to, $subject, $message, $headers)) {
             $result['message'] = "L'e-mail de confirmation a été envoyé avec succès.";
@@ -324,10 +355,10 @@ class CRUD
             $result['message'] = "Votre profil joueur n'a pas pu être envoyé à LaniakBasketballAcademy. Veuillez contacter directement laniak@levelnext.fr.";
             $result['class'] = "error";
         }
-    
+
         return $result;
     }
-    
+
 
 
     // Ajout d'une nouvelle méthode pour mettre à jour les informations de l'utilisateur
