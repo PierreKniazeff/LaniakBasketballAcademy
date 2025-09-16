@@ -1,1 +1,0 @@
-<?php define('BASE_URL', 'https://levelnext.fr/'); ?>

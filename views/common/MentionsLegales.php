@@ -1,9 +1,26 @@
+<?php
+// Sécurité : empêcher l'accès direct si tu inclues ce fichier dans un template
+if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
+    // Facultatif : tu peux rediriger ou tout simplement laisser l'accès pour cette page statique légale
+    // header('Location: /');
+    // exit;
+}
+// Inclusion de la config centrale
+require_once __DIR__ . '/../../config/config.php';
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Mentions légales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- (Tu peux ajouter tes CSS/boostrap si besoin ici) -->
+</head>
 <body>
     <h1>Mentions légales</h1>
     <p>
     Informations légales <br>
-MENTIONS LEGALES : <br><br>
-
+    MENTIONS LEGALES : <br><br>
 Correspondant aux obligations de l'article 6-III et 19 de la Loi numéro 2004-575 du 21 juin 2004 
 relative à la Confiance de l'économie numérique, dite L.C.E.N., nous informons les utilisateurs 
 du site : levelnext.fr Les infos qui suivent :<br><br>
@@ -114,3 +131,4 @@ Les bases de données sont protégées par les règles de la loi du 1er juillet 
 la directive 96/9 du 11 mars 1996 relative à la protection juridique des bases de données. <br>
     </p>
 </body>
+</html>

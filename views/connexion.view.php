@@ -1,44 +1,38 @@
 <?php
-// session_start(); // Démarre la session au tout début du script
-// require_once __DIR__ . '/../views/common/header.php';
+// Optionnel : Bloquer l’accès direct à la vue (supprimable selon ton organisation)
+// if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
+//     header("Location: /");
+//     exit;
+// }
 
-// Définition des messages de succès et d'erreur
+// Messages de succès/erreur
 $successMessage = isset($_GET['success']) && $_GET['success'] == 1 ? "Connexion réussie!" : "";
 $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Identifiants incorrects. Veuillez réessayer." : "";
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Connexion</title>
-
-    <!-- Styles CSS -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #F5F5F5;
-            /* Blanc pour le fond de la page */
         }
-
     </style>
 </head>
-
 <body>
-
     <div class="container">
         <h2 class="mb-4">Formulaire de Connexion</h2>
 
-        <!-- Afficher le message de succès -->
         <?php if ($successMessage): ?>
             <div class="alert alert-success"><?= $successMessage ?></div>
         <?php endif; ?>
 
-        <!-- Afficher le message d'erreur -->
         <?php if ($errorMessage): ?>
             <div class="alert alert-danger"><?= $errorMessage ?></div>
         <?php endif; ?>
@@ -53,12 +47,10 @@ $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Identifiants inc
                 <input type="password" id="password" name="password" class="form-control border-dark" required>
             </div>
             <button type="submit" class="btn btn-primary">Se connecter</button>
-            <a href="https://levelnext.fr/views/password_recovery.view.php" class="btn btn-secondary">Mot de passe oublié</a>
+            <a href="index.php?page=password_recovery" class="btn btn-secondary">Mot de passe oublié</a>
         </form>
     </div>
 
     <?php require_once __DIR__ . '/../views/common/footer.php'; ?>
-
 </body>
-
 </html>

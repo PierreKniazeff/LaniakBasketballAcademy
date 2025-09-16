@@ -1,15 +1,17 @@
 <?php
-// Charger la configuration de la base de données
-$config = $config = require_once 'config/database.php';
+// Charger la configuration de la base de données (chemin robuste)
+$config = require __DIR__ . '/../config/database.php';
 
-// Créer une instance de la classe PDO pour la connexion à la base de données
-$pdo = new PDO("mysql:dbname={$config['database']};host={$config['host']}", $config['user'], $config['password']);
+// Créer une instance PDO pour la connexion à la base
+$dsn = "mysql:host={$config['host']};dbname={$config['database']}";
 
-// Configurer PDO pour qu'il génère des exceptions en cas d'erreur
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO($dsn, $config['user'], $config['password']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->exec("set names utf8");
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
 
-// Définir le jeu de caractères à utf8
-$pdo->exec("set names utf8");
-
-// Retourner l'objet PDO
+// Retourner l'objet PDO pour inclusion ailleurs
 return $pdo;

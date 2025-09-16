@@ -1,42 +1,38 @@
 <?php
-// session_start(); // Start the session at the very beginning of the script
-// require_once __DIR__ . '/../views/common/header.php';
+// Optional: Block direct access to the view (remove if not needed)
+// if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
+//     header("Location: /");
+//     exit;
+// }
 
-// Define success and error messages
+// Success/error messages
 $successMessage = isset($_GET['success']) && $_GET['success'] == 1 ? "Login successful!" : "";
 $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Incorrect credentials. Please try again." : "";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
-
-    <!-- Styles CSS -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #F5F5F5; /* White for the page background */
+            background-color: #F5F5F5;
         }
     </style>
 </head>
-
 <body>
-
     <div class="container">
         <h2 class="mb-4">Login Form</h2>
 
-        <!-- Display success message -->
         <?php if ($successMessage): ?>
             <div class="alert alert-success"><?= $successMessage ?></div>
         <?php endif; ?>
 
-        <!-- Display error message -->
         <?php if ($errorMessage): ?>
             <div class="alert alert-danger"><?= $errorMessage ?></div>
         <?php endif; ?>
@@ -50,12 +46,11 @@ $errorMessage = isset($_GET['error']) && $_GET['error'] == 1 ? "Incorrect creden
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="password" class="form-control border-dark" required>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="https://levelnext.fr/views/password_recoveryEn.view.php" class="btn btn-secondary">Forgot Password</a>
+            <button type="submit" class="btn btn-primary">Log in</button>
+            <a href="index.php?page=password_recoveryEn" class="btn btn-secondary">Forgot Password</a>
         </form>
     </div>
 
     <?php require_once __DIR__ . '/../views/common/footer.php'; ?>
-
 </body>
 </html>

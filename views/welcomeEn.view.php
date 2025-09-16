@@ -1,3 +1,10 @@
+<?php
+if (basename($_SERVER['SCRIPT_FILENAME']) == basename(__FILE__)) {
+    header("Location: /");
+    exit;
+}
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

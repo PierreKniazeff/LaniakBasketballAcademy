@@ -1,39 +1,45 @@
 <?php
 
+// Enable debug (disable in production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Include the database configuration file
-$config = require_once __DIR__ . '/../config/database.php';
+// Include the database config (robust path for MVC)
+$config = require __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/User.class.php';
+// Include global config for the URL constant
+require_once __DIR__ . '/../config/config.php';
 
+/**
+ * Login controller to authenticate users and update profile info
+ */
 class LoginController
 {
     private $pdo;
 
-
     public function __construct()
     {
-        global $config;
+        $config = require __DIR__ . '/../config/database.php';
         if (session_status() == PHP_SESSION_NONE) {
-            session_start(); // Start the session if necessary
+            session_start();
         }
         try {
             $this->pdo = new PDO(
-                "mysql:host=" . $config['host'] . ";dbname=" . $config['database'],
+                "mysql:host=" . $config['host'] . ";dbname=" . $config['database'] . ";charset=utf8",
                 $config['user'],
                 $config['password'],
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
             );
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            // Handle database connection errors appropriately
-            die("Database connection error: " . $e->getMessage());
+            die("Erreur de connexion à la base de données : " . $e->getMessage());
         }
     }
 
-
+    /**
+     * Try to log in a user with email/password
+     */
     public function loginUser($email, $password)
     {
         try {
@@ -65,11 +71,12 @@ class LoginController
                     );
                     // Store the $user instance in the session
                     $_SESSION['user_logged_in'] = true;
-                    $_SESSION['user'] = serialize($user); // Serialize to store the object in the session
-                    $_SESSION['user_prenom'] = $user->getPrenom(); // Add this line to store the first name
-                    $_SESSION['email'] = $user->getEmail();  // Store the user's email in the session
-                    // Redirect to the utilisateur.view.php page
-                    header('Location: https://levelnext.fr/views/utilisateurEn.view.php');
+                    $_SESSION['user'] = serialize($user);
+                    $_SESSION['user_prenom'] = $user->getPrenom();
+                    $_SESSION['email'] = $user->getEmail();
+
+                    // MVC redirect (never direct to view file!)
+                    header('Location: ' . URL . 'index.php?page=utilisateurEn');
                     exit();
                 } else {
                     return "Incorrect credentials. Please try again.";
@@ -78,20 +85,30 @@ class LoginController
                 return "Incorrect credentials. Please try again.";
             }
         } catch (PDOException $e) {
-            // Log the error for debugging purposes
             error_log("Query error: " . $e->getMessage());
-            // Display a generic error message to the user
             die("An error occurred. Please try again later.");
         }
     }
 
+    /**
+     * Update a user's profile field (only allowed fields)
+     */
     public function updateUserField($userEmail, $field, $value)
     {
-        // Check if the field is allowed
+        // Allowed fields for update
         $allowedFields = [
-            'prenom', 'nom', 'email', 'tel',
-            'date_naissance', 'genre', 'taille', 'poids',
-            'club', 'niveau_championnat', 'poste', 'objectifs'
+            'prenom',
+            'nom',
+            'email',
+            'tel',
+            'date_naissance',
+            'genre',
+            'taille',
+            'poids',
+            'club',
+            'niveau_championnat',
+            'poste',
+            'objectifs'
         ];
 
         if (!in_array($field, $allowedFields)) {
@@ -99,7 +116,6 @@ class LoginController
         }
 
         try {
-            // Prepare the update query
             $sql = "UPDATE inscription SET $field = :value WHERE email = :email";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':value', $value);
@@ -111,6 +127,13 @@ class LoginController
             return '<div class="error">Update failed: ' . $e->getMessage() . '</div>';
         }
     }
+    public function updateUser($email, $fields)
+    {
+        require_once __DIR__ . '/crud.php';
+        $crud = new CRUD();
+        return $crud->updateUser($email, $fields);
+    }
+
 }
 
 // Use the LoginController class
@@ -130,13 +153,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($email && $password) {
         $loginResult = $loginController->loginUser($email, $password);
         if ($loginResult === true) {
-            // User is successfully authenticated
-            // Redirect to the utilisateur.view.php page
-            header('Location: https://levelnext.fr/views/utilisateurEn.view.php');
+            // User is successfully authenticated (should redirect)
+            header('Location: ' . URL . 'index.php?page=utilisateurEn');
             exit();
         } else {
-            // User is not authenticated
-            // Set the error message
             $errorMessage = $loginResult;
         }
     }
@@ -150,7 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <!-- Styles CSS -->
+    <!-- CSS Styles -->
     <style>
         .error,
         .success {
@@ -173,14 +193,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <?php if (!isset($_SESSION['user_logged_in'])) : ?>
+    <?php if (!isset($_SESSION['user_logged_in'])): ?>
         <!-- Display the login form only if the user is not already logged in -->
         <h1>Login</h1>
         <!-- Display the error message -->
-        <?php if (isset($errorMessage)) : ?>
+        <?php if (isset($errorMessage) && $errorMessage): ?>
             <div class="error"><?= $errorMessage ?></div>
         <?php endif; ?>
-
+        <!-- (Place your login form HTML here if you have one!) -->
     <?php endif; ?>
 </body>
 

@@ -4,12 +4,12 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1>Descriptif des Programmes</h1><br><br>
+                <h1>Descriptifs des programmes</h1><br><br>
             </div>
             <?php
               $pdo = require 'controllers/pdo.php';
-            // 1> Sélection de l'IdType dans les Programmes : 
-            // requête initiale effectuée pour récupérer toutes les entrées de la table programmes :
+            // 1> Select IdType from the Programs: 
+            // Initial query executed to retrieve all entries from the programmes table:
             $sql = 'SELECT * FROM programmes';
             $stmt = $pdo->query($sql);
             $formations = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,28 +29,28 @@
                                 <?= nl2br($f['description']) ?>
                             </p>
                             <?php
-                            // 2> Préparation de la requête pour obtenir le libellé de Type :
-                            // Pour chaque formation récupérée, une requête est préparée pour obtenir 
-                            // le libellé correspondant de la table type basé sur l'idType : 
+                            // 2> Prepare the query to get the label of Type:
+                            // For each training retrieved, a query is prepared to obtain 
+                            // the corresponding label from the type table based on the idType: 
                             $query = "SELECT libelle FROM type WHERE idType = :idType";
                             $stmt = $pdo->prepare($query);
-                            // La requête $query fonctionne comme une jointure implicite entre 
-                            // les deux tables sur le champ idType, bien que la jointure ne soit 
-                            // pas explicitement formulée comme telle dans une seule requête SQL. 
-                            // La logique de jointure est gérée par le code PHP en extrayant 
-                            // d'abord toutes les informations de programmes puis en faisant 
-                            // correspondre chaque idType de programmes avec idType de type via 
-                            // des requêtes SQL séparées pour chaque ligne.
+                            // The $query operates as an implicit join between 
+                            // the two tables on the idType field, even though the join is 
+                            // not explicitly formulated as such in a single SQL query. 
+                            // The join logic is handled by the PHP code by first extracting 
+                            // all the information from programmes and then matching 
+                            // each idType from programmes with idType from type via 
+                            // separate SQL queries for each row.
                             $stmt->bindParam(':idType', $f['idType'], PDO::PARAM_INT);
-                            // Liaison de Paramètre (bindParam) : La méthode bindParam est utilisée pour lier 
-                            // le paramètre :idType de la requête préparée au idType de la formation en cours 
-                            // de traitement. Cela assure que la valeur de idType provenant de programmes 
-                            // est utilisée pour filtrer les résultats de la table type.
+                            // Binding Parameter (bindParam): The bindParam method is used to bind 
+                            // the :idType parameter of the prepared query to the idType of the formation being processed. 
+                            // This ensures that the value of idType from programmes 
+                            // is used to filter results from the type table.
                             $stmt->execute();
                             $type = $stmt->fetch(PDO::FETCH_ASSOC);
                             ?>
-                            <!-- Affichage du Résultat : Le libellé récupéré ($type['libelle']) est 
-                            ensuite affiché dans un élément HTML : -->
+                            <!-- Displaying the Result: The retrieved label ($type['libelle']) is 
+                            then displayed in an HTML element: -->
                             <span class="badge text-bg-dark">
                                 <?= $type['libelle'] ?>
                             </span>
@@ -59,7 +59,7 @@
                 </div>
             <?php endforeach ?>
         </div>
-        <p class="color"><br>*Uniquement lors des séances de coaching personalisés</p>
+        <p class="color"><br>*Only during personalized coaching sessions</p>
     </div>
     <style>
         .color {
@@ -68,10 +68,9 @@
 
         .container {
             padding: 0 15px;
-            /* Remediation : force la marge zéro */
+            /* Remediation : force the margin to zero */
         }
     </style>
-
 
     <footer>
         <div class="container-fluid">

@@ -1,10 +1,11 @@
 <?php
 session_start();
-// Effacer toutes les données de session
+// Clear all session data
 $_SESSION = array();
-// Détruire la session
+// Destroy the session
 session_destroy();
-// Rediriger vers la page de connexion ou d'accueil
-header('Location: https://levelnext.fr/connexionEn');
+// Include the MVC config for base URL
+require_once __DIR__ . '/../config/config.php';
+// Redirect to the English login page via central controller
+header('Location: ' . URL . 'index.php?page=connexionEn');
 exit;
-

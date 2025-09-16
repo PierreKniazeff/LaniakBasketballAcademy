@@ -1,39 +1,46 @@
 <?php
 
+// Affichage des erreurs pour le débogage (à désactiver en production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Inclure le fichier de configuration de la base de données
-$config = require_once __DIR__ . '/../config/database.php';
+// Inclure la config base de données robuste (chemin MVC correct)
+$config = require __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/User.class.php';
+// Inclusion de la config MVC centrale si besoin de la constante URL
+require_once __DIR__ . '/../config/config.php';
 
+/**
+ * Contrôleur d'authentification utilisateur et mise à jour profil
+ */
 class LoginController
 {
     private $pdo;
 
-
     public function __construct()
     {
-        global $config;
+        $config = require __DIR__ . '/../config/database.php';
         if (session_status() == PHP_SESSION_NONE) {
-            session_start(); // Démarrer la session ici si nécessaire
+            session_start();
         }
         try {
             $this->pdo = new PDO(
-                "mysql:host=" . $config['host'] . ";dbname=" . $config['database'],
+                "mysql:host=" . $config['host'] . ";dbname=" . $config['database'] . ";charset=utf8",
                 $config['user'],
                 $config['password'],
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
             );
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            // Gérer les erreurs de connexion à la base de données de manière appropriée
             die("Erreur de connexion à la base de données : " . $e->getMessage());
         }
     }
 
 
+    /**
+     * Tente de connecter un utilisateur à partir d'un email/mot de passe
+     */
     public function loginUser($email, $password)
     {
         try {
@@ -44,7 +51,7 @@ class LoginController
             if ($stmt->rowCount() > 0) {
                 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (password_verify($password, $userData['password'])) {
-                    // Création de l'instance de l'utilisateur avec des données récupérées
+                    // Création de l'objet User depuis les données BDD
                     $user = new User(
                         $userData['prenom'],
                         $userData['nom'],
@@ -63,13 +70,14 @@ class LoginController
                         $userData['confirmed'],
                         $userData['token']
                     );
-                    // Stockage de l'instance $user dans la session
+                    // Stocker dans la session
                     $_SESSION['user_logged_in'] = true;
-                    $_SESSION['user'] = serialize($user); // Serialize pour stocker l'objet dans la session
-                    $_SESSION['user_prenom'] = $user->getPrenom(); // Ajoutez cette ligne pour stocker le prénom
-                    $_SESSION['email'] = $user->getEmail();  // Stocker l'email de l'utilisateur dans la session
-                    // Redirection vers la page utilisateur.view.php
-                    header('Location: https://levelnext.fr/views/utilisateur.view.php');
+                    $_SESSION['user'] = serialize($user);
+                    $_SESSION['user_prenom'] = $user->getPrenom();
+                    $_SESSION['email'] = $user->getEmail();
+
+                    // Redirection : TOUJOURS par le contrôleur MVC
+                    header('Location: ' . URL . 'index.php?page=utilisateur');
                     exit();
                 } else {
                     return "Identifiants incorrects. Veuillez réessayer.";
@@ -78,20 +86,30 @@ class LoginController
                 return "Identifiants incorrects. Veuillez réessayer.";
             }
         } catch (PDOException $e) {
-            // Log the error for debugging purposes
             error_log("Erreur de requête : " . $e->getMessage());
-            // Afficher un message d'erreur générique à l'utilisateur
             die("Une erreur s'est produite. Veuillez réessayer ultérieurement.");
         }
     }
 
+    /**
+     * Met à jour le champ profil utilisateur donné
+     */
     public function updateUserField($userEmail, $field, $value)
     {
-        // Vérifier si le champ est autorisé
+        // Validation des champs autorisés
         $allowedFields = [
-            'prenom', 'nom', 'email', 'tel',
-            'date_naissance', 'genre', 'taille', 'poids',
-            'club', 'niveau_championnat', 'poste', 'objectifs'
+            'prenom',
+            'nom',
+            'email',
+            'tel',
+            'date_naissance',
+            'genre',
+            'taille',
+            'poids',
+            'club',
+            'niveau_championnat',
+            'poste',
+            'objectifs'
         ];
 
         if (!in_array($field, $allowedFields)) {
@@ -99,7 +117,6 @@ class LoginController
         }
 
         try {
-            // Préparer la requête de mise à jour
             $sql = "UPDATE inscription SET $field = :value WHERE email = :email";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':value', $value);
@@ -111,32 +128,36 @@ class LoginController
             return '<div class="error">Échec de la mise à jour : ' . $e->getMessage() . '</div>';
         }
     }
+    public function updateUser($email, $fields)
+    {
+        require_once __DIR__ . '/crud.php';
+        $crud = new CRUD();
+        return $crud->updateUser($email, $fields);
+    }
+
 }
+
 
 // Utilisation de la classe LoginController
 $loginController = new LoginController();
 
-// Définir les messages par défaut
+// Messages par défaut pour affichage
 $successMessage = "";
 $errorMessage = "";
 
-// Vérification si le formulaire a été soumis
+// Vérifie si le formulaire de connexion est soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Récupération des données du formulaire
     $email = $_POST['email'] ?? null;
     $password = $_POST['password'] ?? null;
 
-    // Validation des données d'identification
+    // Si les identifiants sont bien remplis
     if ($email && $password) {
         $loginResult = $loginController->loginUser($email, $password);
         if ($loginResult === true) {
-            // L'utilisateur est authentifié avec succès
-            // Redirection vers la page utilisateur.view.php
-            header('Location: https://levelnext.fr/views/utilisateur.view.php');
+            // Utilisateur connecté (normalement la redirection bloque ici)
+            header('Location: ' . URL . 'index.php?page=utilisateur');
             exit();
         } else {
-            // L'utilisateur n'est pas authentifié
-            // Définir le message d'erreur
             $errorMessage = $loginResult;
         }
     }
@@ -173,14 +194,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <?php if (!isset($_SESSION['user_logged_in'])) : ?>
-        <!-- Afficher le formulaire de connexion uniquement si l'utilisateur n'est pas déjà connecté -->
+    <?php if (!isset($_SESSION['user_logged_in'])): ?>
+        <!-- Affiche le formulaire si non connecté -->
         <h1>Login</h1>
-        <!-- Afficher le message d'erreur -->
-        <?php if (isset($errorMessage)) : ?>
+        <?php if (isset($errorMessage) && $errorMessage): ?>
             <div class="error"><?= $errorMessage ?></div>
         <?php endif; ?>
-
+        <!-- (Insère ici ton formulaire login si tu en as un !) -->
     <?php endif; ?>
 </body>
 

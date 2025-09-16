@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1>Program Descriptions</h1><br><br>
+                <h1>Programs Descriptions</h1><br><br>
             </div>
             <?php
               $pdo = require 'controllers/pdo.php';
