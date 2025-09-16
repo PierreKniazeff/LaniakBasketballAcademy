@@ -1,10 +1,10 @@
 <?php
 // database.php
 return [
-    'database' => '',
-    'host' => '',
-    'user' => '',
-    'password' => ''
+    'database' => 'levelnepierre',
+    'host' => 'levelnepierre.mysql.db',
+    'user' => 'levelnepierre',
+    'password' => 'Moulinard95520'
 ];
 
     
