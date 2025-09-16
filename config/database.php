@@ -1,8 +1,8 @@
 <?php
 // database.php
 return [
-    'database' => 'levelnepierre',
-    'host' => 'levelnepierre.mysql.db',
+    'database' => '',
+    'host' => '',
     'user' => '',
     'password' => ''
 ];
